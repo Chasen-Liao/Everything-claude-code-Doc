@@ -1,341 +1,581 @@
-# Everything Claude Code 使用指南
+# Everything Claude Code 中文教程仓库
 
-> 这是一个功能极其强大的 Claude Code 配置集合，包含代理、技能、命令、规则和自动化钩子。经过 10 多个月的密集日常使用和真实产品开发不断演化，是生产级别的开发工具。
+> 这是一个面向 **Everything Claude Code / ECC** 的中文教程型 GitHub 仓库，用来帮助你更快理解它的能力边界、目录结构、典型工作流和使用入口。
+> 上游项目当前仓库名：<https://github.com/affaan-m/ECC>
+> 历史仓库名 / 旧链接来源：`everything-claude-code`
+
+---
+
+## 这份仓库是什么 / 不是什么
+
+这是一个**中文教程型仓库**，目标不是完整复制上游说明，而是把 ECC 这套体系讲清楚，方便中文用户快速建立整体认知，并按教程路线逐步上手。
+
+它**不是**上游项目的完整官方文档站，也不是只包含少量配置片段的示例仓库。当前这个仓库主要包含四部分：
+
+- 顶层的这份 [`README.md`](README.md)：中文总教程与导读入口。
+- [`ECC-COMMANDS-ZH.md`](ECC-COMMANDS-ZH.md)：中文命令速查。
+- [`ECC-NAVIGATION-ZH.md`](ECC-NAVIGATION-ZH.md)：本地上游副本导航索引。
+- 本地同步的上游副本：[`everything-claude-code/`](everything-claude-code/)。
+
+如果你要快速理解 ECC 的设计思路，看这套中文文档就够了；如果你要核对原始定义、目录细节、脚本实现、实际 skill/agent 内容，再进入上游仓库或本地同步副本。
+
+---
+
+## 快速开始
+
+如果你是第一次接触 ECC，建议按下面顺序阅读：
+
+1. 先看下文的“核心概念”，理解 **Agent / Skill / Command / Rule / Hook / Harness** 这些层次分别是什么。
+2. 再看下文的“推荐教程路线”，按你的目标选择阅读顺序。
+3. 然后看 [`ECC-COMMANDS-ZH.md`](ECC-COMMANDS-ZH.md) 和 [`ECC-NAVIGATION-ZH.md`](ECC-NAVIGATION-ZH.md) 建立命令与目录的整体地图。
+4. 最后根据需要进入上游同步副本 [`everything-claude-code/`](everything-claude-code/) 核对原始定义和实现细节。
+
+如果你更习惯直接读原文，可以从这些入口开始：
+
+- 上游项目主页：<https://github.com/affaan-m/ECC>
+- 上游英文 README：<https://github.com/affaan-m/ECC/blob/main/README.md>
+- 上游中文 README：<https://github.com/affaan-m/ECC/blob/main/README.zh-CN.md>
+- 上游命令速查：<https://github.com/affaan-m/ECC/blob/main/COMMANDS-QUICK-REF.md>
+- 上游长文指南：<https://github.com/affaan-m/ECC/blob/main/the-longform-guide.md>
+- 上游短文指南：<https://github.com/affaan-m/ECC/blob/main/the-shortform-guide.md>
+- 上游安全指南：<https://github.com/affaan-m/ECC/blob/main/the-security-guide.md>
+- 上游故障排查：<https://github.com/affaan-m/ECC/blob/main/docs/TROUBLESHOOTING.md>
+
+---
+
+## 适合谁看
+
+这份仓库尤其适合下面几类读者：
+
+- 想快速理解 ECC 是什么、但不想一开始就扎进上游大仓库的人。
+- 已经在用 Claude Code、Cursor、Codex 或其他 agent harness，想参考 ECC 工作流设计的人。
+- 想把 agents、skills、rules、hooks 这一整套方法借到自己项目里的人。
+- 想先看中文教程，再决定是否深入上游原始文档的人。
+
+如果你只是想看上游最权威定义，或者要逐文件核对实现细节，那就应该直接进入 [`everything-claude-code/`](everything-claude-code/) 或上游官方仓库。
+
+---
+
+## 你会在这里得到什么
+
+读完这份仓库，你通常会得到三样东西：
+
+1. 对 ECC 整体结构的中文理解，而不是零散命令列表。
+2. 一条更省时间的阅读路径，知道应该先看哪几个入口文件。
+3. 一套把 ECC 拆成 agent、skill、command、rule、hook、harness 来理解的方法。
+
+如果你想进一步对照原始定义，可以把本仓库和 [`everything-claude-code/`](everything-claude-code/) 一起看：前者负责讲清楚，后者负责给原文和实现。
+
+---
+
+## 常见误解
+
+### 1. ECC 只是 Claude Code 的命令包吗？
+
+不是。现在的 ECC 更接近一套完整的 **agent harness performance system**，除了命令，还包括 agents、skills、rules、hooks、上下文管理、学习沉淀和跨平台适配。
+
+### 2. skill 和 slash command 是一回事吗？
+
+不是。skill 是能力定义或工作流定义，slash command 是触发入口。某个 skill 存在，并不等于一定有同名全局命令。
+
+### 3. 这个仓库是上游官方文档吗？
+
+不是。本仓库是中文教程和导读层，方便快速理解；权威定义仍以上游仓库和本地同步副本为准。
+
+### 4. 我是不是必须把整个 ECC 全量照搬？
+
+不一定。很多人更适合按需吸收，例如只借 rules、只借 commands、或者只参考 agents / hooks 的组织方式。
+
+---
+
+## 和上游仓库的关系
+
+你可以把这两个部分理解成不同层级：
+
+- [README.md](README.md)：中文教程层，负责解释、串联、给出阅读路径。
+- [`everything-claude-code/`](everything-claude-code/)：上游同步层，负责提供原始文档、真实目录和实现细节。
+
+如果你想快速学会怎么用，优先看本仓库顶层中文文档；如果你想核对最新定义、逐项确认命令、查看真实 skill 或 hook 内容，再进入 [`everything-claude-code/`](everything-claude-code/)。
+
+---
+
+## FAQ
+
+### 我应该先看哪个文件？
+
+如果你是第一次接触 ECC，先看本页，再看 [ECC-COMMANDS-ZH.md](ECC-COMMANDS-ZH.md)，然后看 [ECC-NAVIGATION-ZH.md](ECC-NAVIGATION-ZH.md)。
+
+### 我只想知道有哪些命令怎么办？
+
+先看 [ECC-COMMANDS-ZH.md](ECC-COMMANDS-ZH.md)，再按需要对照 [`everything-claude-code/COMMANDS-QUICK-REF.md`](everything-claude-code/COMMANDS-QUICK-REF.md)。
+
+### 我只想知道上游副本里该从哪里读起？
+
+直接看 [ECC-NAVIGATION-ZH.md](ECC-NAVIGATION-ZH.md)，它就是为这个目的准备的。
+
+### 我想把 ECC 的一部分抄到自己的项目里？
+
+优先看本页的“推荐教程路线”里的“路线 4”，再进入 [`everything-claude-code/examples/`](everything-claude-code/examples/) 和 [`everything-claude-code/rules/README.md`](everything-claude-code/rules/README.md)。
+
+---
+
+## 仓库状态与原始来源
+
+为了便于对照，这里说明一下当前仓库与上游的关系：
+
+- **本仓库**：中文教程、中文整理、适合快速上手和建立整体认知。
+- **本地同步副本**：[`everything-claude-code/`](everything-claude-code/)，用于在本地直接查上游真实内容。
+- **上游官方仓库**：`affaan-m/ECC`，这是判断最新结构与最新能力的权威来源。
+
+当前本地同步副本已成功同步到上游仓库，可直接查看：[`everything-claude-code/`](everything-claude-code/)。
 
 ---
 
 ## 目录
 
-1. [核心概念](#核心概念)
-2. [代理（Agents）](#代理-agents)
-3. [技能（Skills）](#技能-skills)
-4. [命令（Commands）](#命令-commands)
-5. [规则（Rules）](#规则-rules)
-6. [钩子（Hooks）](#钩子-hooks)
-7. [实际工作流示例](#实际工作流示例)
-8. [快速参考表](#快速参考表)
+1. 这份仓库是什么 / 不是什么
+2. 快速开始
+3. 仓库状态与原始来源
+4. 核心概念
+5. 现在的 ECC 和早期版本有什么不同
+6. 推荐教程路线
+7. 推荐阅读入口
+8. 代理（Agents）
+9. 技能（Skills）
+10. 命令（Commands）
+11. 规则（Rules）
+12. 钩子（Hooks）
+13. 实际工作流示例
+14. 快速参考表
 
 ---
 
 ## 核心概念
 
-Everything Claude Code 由以下核心组件构成：
+ECC 现在已经不只是“Claude Code 的一套配置”，更接近一个**AI agent harness performance system**：它把代理、技能、命令、规则、钩子、安装清单和跨平台适配整合成一套可复用工作系统。
 
-| 组件 | 数量 | 功能 |
-|------|------|------|
-| **代理（Agents）** | 13个 | 专业化子代理，处理特定任务 |
-| **技能（Skills）** | 37个 | 领域知识和工作流定义 |
-| **命令（Commands）** | 31个 | 斜杠命令，快速触发功能 |
-| **规则（Rules）** | 31条 | 始终遵循的编码指南 |
-| **钩子（Hooks）** | 多个 | 基于触发事件的自动化 |
+> 说明：下面的数量与描述基于当前已同步的上游 `affaan-m/ECC` 本地副本，以及上游 README 中公开说明的当前表面。版本继续演进时，数量可能变化。
+
+| 组件 | 当前规模 | 作用 |
+| ------ | ------ | ------ |
+| **代理（Agents）** | 60 个代理文件 | 把复杂任务委派给专门角色，例如规划、审查、构建修复、文档更新 |
+| **技能（Skills）** | 232 个技能目录 | 封装领域知识、工作流和可复用模式 |
+| **命令（Commands）** | 75 个命令文件 | 作为 slash command 或命令入口调用工作流 |
+| **全局 slash commands** | 59 个 | 当前安装表面里最常用的全局命令集合 |
+| **规则（Rules）** | 多语言规则体系 | 约束编码风格、测试、安全和项目行为 |
+| **钩子（Hooks）** | hooks 清单与运行时组件 | 在工具调用前后、会话开始结束等时机自动执行 |
+| **跨平台适配** | 多个 harness / IDE 目录 | 让同一套体系能在 Claude Code、Codex、Cursor、OpenCode、Gemini 等环境中复用 |
+
+### 这些概念如何区分
+
+- **Agent**：子代理，适合复杂、专业化、需要独立上下文的任务。
+- **Skill**：能力定义或工作流定义，本质是可复用经验包。
+- **Command**：触发入口，通常对应 `/plan`、`/tdd` 这类命令。
+- **Rule**：始终生效的行为约束，例如安全要求、测试要求、编码习惯。
+- **Hook**：自动化脚本，在特定事件时触发。
+- **Harness**：Claude Code、Codex、Cursor、OpenCode、Gemini 等“承载 AI agent 的运行环境”。ECC 现在强调的是**跨 harness 复用**，而不是只服务单一工具。
+
+---
+
+## 现在的 ECC 和早期版本有什么不同
+
+如果你以前看过 `everything-claude-code` 时期的介绍，最容易混淆的是：**ECC 现在的范围大了很多**。
+
+早期常见理解是：
+
+- 面向 Claude Code 的配置集合。
+- 重点是 agents、skills、commands、rules、hooks。
+- 常见命令数量较少，语言覆盖较集中。
+
+当前 ECC 的变化主要有这些：
+
+1. **仓库定位升级**
+   - 不再只是配置集合，而是“agent harness performance system”。
+   - 不只关注提示词和命令，还覆盖上下文优化、会话恢复、持续学习、安全审计、评估与编排。
+
+2. **跨平台支持明显增强**
+   - 不再局限于 Claude Code。
+   - 现在仓库里可以直接看到 `.cursor/`、`.codex/`、`.opencode/`、`.gemini/`、`.zed/`、`.kiro/`、`.trae/` 等目录或适配层。
+
+3. **命令面显著扩大**
+   - 已确认存在 75 个命令文件。
+   - 上游命令速查中明确写了 **59 个全局 slash commands**。
+   - 新增了质量门禁、上下文预算、循环执行、多模型协作、文档查询、harness 审计等能力。
+
+4. **文档体系更完整**
+   - 除主 README 外，还有长文指南、短文指南、安全指南、故障排查、架构说明、安装设计、Hermes 相关文档等。
+
+5. **ECC 2.0 / Hermes 方向出现**
+   - 上游文档里已经出现 `ecc2/`、Hermes setup、operator workflow 等新方向。
+   - 这说明 ECC 不再只是“命令包”，而是在往更完整的操作层与控制层演进。
+
+---
+
+## 推荐教程路线
+
+如果你希望这个仓库更像一套教程来读，而不是一篇长说明，建议按目标选择：
+
+### 路线 1：第一次接触 ECC
+
+1. 先看本页的“核心概念”。
+2. 再看 [`ECC-COMMANDS-ZH.md`](ECC-COMMANDS-ZH.md) 了解最常用命令。
+3. 再看 [`ECC-NAVIGATION-ZH.md`](ECC-NAVIGATION-ZH.md) 建立整个上游副本的目录地图。
+4. 最后进入 [`everything-claude-code/README.md`](everything-claude-code/README.md) 对照原始定义。
+
+### 路线 2：想尽快学会怎么用
+
+1. [`ECC-COMMANDS-ZH.md`](ECC-COMMANDS-ZH.md)
+2. 本页的“实际工作流示例”
+3. [`everything-claude-code/COMMANDS-QUICK-REF.md`](everything-claude-code/COMMANDS-QUICK-REF.md)
+4. [`everything-claude-code/the-shortform-guide.md`](everything-claude-code/the-shortform-guide.md)
+
+### 路线 3：想研究完整系统
+
+1. [`everything-claude-code/README.md`](everything-claude-code/README.md)
+2. [`everything-claude-code/the-longform-guide.md`](everything-claude-code/the-longform-guide.md)
+3. [`everything-claude-code/agents/`](everything-claude-code/agents/)
+4. [`everything-claude-code/skills/`](everything-claude-code/skills/)
+5. [`everything-claude-code/rules/`](everything-claude-code/rules/)
+6. [`everything-claude-code/hooks/`](everything-claude-code/hooks/)
+
+### 路线 4：想抄一套到自己的项目里
+
+1. [`everything-claude-code/examples/`](everything-claude-code/examples/)
+2. [`everything-claude-code/rules/README.md`](everything-claude-code/rules/README.md)
+3. [`everything-claude-code/install.sh`](everything-claude-code/install.sh)
+4. [`everything-claude-code/install.ps1`](everything-claude-code/install.ps1)
+5. [`everything-claude-code/docs/SELECTIVE-INSTALL-ARCHITECTURE.md`](everything-claude-code/docs/SELECTIVE-INSTALL-ARCHITECTURE.md)
+
+---
+
+## 推荐阅读入口
+
+按“你想解决什么问题”来选入口，通常会更高效。
+
+### 1. 想先知道 ECC 是什么
+
+- 上游英文 README：<https://github.com/affaan-m/ECC/blob/main/README.md>
+- 上游中文 README：<https://github.com/affaan-m/ECC/blob/main/README.zh-CN.md>
+- 本地同步副本入口：[`everything-claude-code/README.md`](everything-claude-code/README.md)
+
+### 2. 想快速知道有哪些命令
+
+- 命令速查：<https://github.com/affaan-m/ECC/blob/main/COMMANDS-QUICK-REF.md>
+- 本地同步副本：[`everything-claude-code/COMMANDS-QUICK-REF.md`](everything-claude-code/COMMANDS-QUICK-REF.md)
+- 命令目录：<https://github.com/affaan-m/ECC/tree/main/commands>
+
+### 3. 想理解背后的方法论
+
+- 长文指南：<https://github.com/affaan-m/ECC/blob/main/the-longform-guide.md>
+- 短文指南：<https://github.com/affaan-m/ECC/blob/main/the-shortform-guide.md>
+- 安全指南：<https://github.com/affaan-m/ECC/blob/main/the-security-guide.md>
+
+### 4. 想解决安装或使用问题
+
+- 故障排查：<https://github.com/affaan-m/ECC/blob/main/docs/TROUBLESHOOTING.md>
+- 选择性安装设计：<https://github.com/affaan-m/ECC/blob/main/docs/SELECTIVE-INSTALL-ARCHITECTURE.md>
+- Hermes 安装：<https://github.com/affaan-m/ECC/blob/main/docs/HERMES-SETUP.md>
+
+### 5. 想查原始定义
+
+- Agents：<https://github.com/affaan-m/ECC/tree/main/agents>
+- Skills：<https://github.com/affaan-m/ECC/tree/main/skills>
+- Rules：<https://github.com/affaan-m/ECC/tree/main/rules>
+- Hooks：<https://github.com/affaan-m/ECC/tree/main/hooks>
+- Docs：<https://github.com/affaan-m/ECC/tree/main/docs>
 
 ---
 
 ## 代理（Agents）
 
-代理是专业化的子代理，可以处理特定领域的复杂任务。当遇到复杂任务时，Claude Code 会自动或根据指令调用这些代理。
+代理是专业化子代理，用来把复杂任务拆给更擅长某一领域的角色。你可以把它理解为“带专长的协作同事”。
 
-### 代理列表与功能
+原始目录：<https://github.com/affaan-m/ECC/tree/main/agents>
 
-| 代理名称 | 文件位置 | 功能描述 |
-|----------|----------|----------|
-| `planner` | `agents/planner.md` | 分析需求，创建详细实现计划 |
-| `tdd-guide` | `agents/tdd-guide.md` | 强制测试驱动开发方法论，80%+ 覆盖率 |
-| `code-reviewer` | `agents/code-reviewer.md` | 通用代码质量与安全审查 |
-| `security-reviewer` | `agents/security-reviewer.md` | 安全漏洞检测与分析 |
-| `build-error-resolver` | `agents/build-error-resolver.md` | 修复构建错误和类型错误 |
-| `e2e-runner` | `agents/e2e-runner.md` | Playwright 端到端测试 |
-| `refactor-cleaner` | `agents/refactor-cleaner.md` | 死代码清理与重构 |
-| `doc-updater` | `agents/doc-updater.md` | 文档同步更新 |
-| `go-reviewer` | `agents/go-reviewer.md` | Go 代码审查（惯用语、并发安全） |
-| `go-build-resolver` | `agents/go-build-resolver.md` | Go 构建错误解决 |
-| `python-reviewer` | `agents/python-reviewer.md` | Python 代码审查（PEP 8、类型提示） |
-| `database-reviewer` | `agents/database-reviewer.md` | PostgreSQL/Supabase 数据库审查 |
-| `architect` | `agents/architect.md` | 系统设计决策与架构规划 |
+### 典型代理类型
+
+以下是当前 ECC 中很有代表性的一组代理：
+
+| 代理名称 | 作用 |
+| ---------- | ---------- |
+| `planner` | 分析需求、识别风险、输出实施计划 |
+| `architect` | 做架构设计、边界划分和权衡 |
+| `tdd-guide` | 强制以测试优先的方式推进开发 |
+| `code-reviewer` | 通用代码质量、安全与可维护性审查 |
+| `security-reviewer` | 从漏洞和风险角度审查改动 |
+| `build-error-resolver` | 定位并修复构建或类型错误 |
+| `e2e-runner` | 生成并执行 E2E 测试 |
+| `doc-updater` | 更新文档、校正文档与实现的一致性 |
+| `docs-lookup` | 查文档、API、配置说明 |
+| `go-reviewer` / `python-reviewer` / `java-reviewer` / `typescript-reviewer` | 语言专项代码审查 |
+| `go-build-resolver` / `cpp-build-resolver` / `java-build-resolver` / `kotlin-build-resolver` | 语言专项构建修复 |
+| `loop-operator` | 循环式任务执行与持续操作 |
+| `harness-optimizer` | 优化 agent harness 的配置与使用方式 |
 
 ### 使用代理的方式
 
-代理可以自动触发，也可以手动调用：
+代理既可以被系统自动调度，也可以作为明确的子代理调用。常见理解方式是：
 
+```text
+用户目标很大
+→ 先交给 planner / architect 明确路线
+→ 开发中交给 tdd-guide / build resolver / reviewer
+→ 完成前交给 code-reviewer / security-reviewer / doc-updater
 ```
-# 自动触发示例
-User: "实现一个用户认证系统"
-→ 系统自动调用 planner → 创建实施计划
-→ 系统自动调用 tdd-guide → 开始 TDD 工作流
 
-# 手动调用代理
-使用 Task 工具指定 subagent_type
-```
+如果你以前只把 ECC 当成“slash command 集合”，这里是一个重要升级点：**现在的 ECC 很强调子代理协作，而不是单条命令孤立执行。**
 
 ---
 
 ## 技能（Skills）
 
-技能是工作流定义和领域知识的集合，包含特定领域的最佳实践和模式。
+技能是工作流定义和领域知识的集合。和 agent 相比，skill 更像“可复用方法论”或“某类任务的标准操作手册”。
 
-### 技能分类
+原始目录：<https://github.com/affaan-m/ECC/tree/main/skills>
 
-#### 1. 测试驱动开发（TDD）
+### 常见技能族
 
-| 技能 | 路径 | 描述 |
-|------|------|------|
-| `tdd-workflow` | `skills/tdd-workflow/` | 通用 TDD 方法论，强制 80%+ 覆盖率 |
-| `tdd-java` | `skills/tdd-java/` | Java TDD 模式 |
-| `django-tdd` | `skills/django-tdd/` | Django 测试策略（pytest-django） |
-| `springboot-tdd` | `skills/springboot-tdd/` | Spring Boot TDD（JUnit 5, Mockito） |
-| `golang-testing` | `skills/golang-testing/` | Go 测试模式（表驱动测试、基准测试） |
+ECC 的 skill 已经很多，不适合在一篇导读里完整罗列。更好的理解方式是按技能族来看：
 
-#### 2. 编程语言模式
+#### 1. 测试与验证
 
-| 技能 | 路径 | 描述 |
-|------|------|------|
-| `golang-patterns` | `skills/golang-patterns/` | Go 惯用语和最佳实践 |
-| `python-patterns` | `skills/python-patterns/` | Pythonic 惯用语、PEP 8 |
-| `java-coding-standards` | `skills/java-coding-standards/` | Java 编码标准 |
-| `jpa-patterns` | `skills/jpa-patterns/` | JPA/Hibernate 模式 |
-| `cpp-testing` | `skills/cpp-testing/` | C++ 测试（GoogleTest） |
+- `tdd-workflow`
+- `golang-testing`
+- `django-tdd`
+- `springboot-tdd`
+- `e2e-testing`
+- `test-coverage` 相关能力
 
-#### 3. Web 框架
+这类技能负责把“先写失败测试、再实现、再验证覆盖率”的流程标准化。
 
-| 技能 | 路径 | 描述 |
-|------|------|------|
-| `django-patterns` | `skills/django-patterns/` | Django 架构模式 |
-| `django-security` | `skills/django-security/` | Django 安全最佳实践 |
-| `django-verification` | `skills/django-verification/` | Django 验证循环 |
-| `springboot-patterns` | `skills/springboot-patterns/` | Spring Boot 架构模式 |
-| `springboot-security` | `skills/springboot-security/` | Spring Security |
-| `springboot-verification` | `skills/springboot-verification/` | Spring Boot 验证循环 |
+#### 2. 语言与框架模式
 
-#### 4. 数据库
+- `golang-patterns`
+- `python-patterns`
+- `frontend-patterns`
+- `backend-patterns`
+- `django-patterns`
+- `springboot-patterns`
+- `postgres-patterns`
+- `jpa-patterns`
+- `nestjs-patterns`
 
-| 技能 | 路径 | 描述 |
-|------|------|------|
-| `postgres-patterns` | `skills/postgres-patterns/` | PostgreSQL 查询优化、索引设计 |
-| `clickhouse-io` | `skills/clickhouse-io/` | ClickHouse 分析数据库 |
-| `database-migrations` | `skills/database-migrations/` | 数据库迁移最佳实践 |
+这类技能更像“某语言 / 某框架下的经验模板”。
 
-#### 5. 前端开发
+#### 3. 安全与审计
 
-| 技能 | 路径 | 描述 |
-|------|------|------|
-| `frontend-patterns` | `skills/frontend-patterns/` | React、Next.js、状态管理 |
-| `e2e-testing` | `skills/e2e-testing/` | Playwright E2E 测试模式 |
+- `security-review`
+- `security-scan`
+- 框架安全类 skill，例如 `django-security`、`springboot-security`
 
-#### 6. DevOps 与部署
+这类技能帮助你从输入校验、配置暴露、认证授权、依赖风险等角度审视项目。
 
-| 技能 | 路径 | 描述 |
-|------|------|------|
-| `deployment-patterns` | `skills/deployment-patterns/` | CI/CD 管道、Docker、部署策略 |
-| `docker-patterns` | `skills/docker-patterns/` | Docker Compose 开发环境 |
+#### 4. 学习与沉淀
 
-#### 7. API 设计
+- `continuous-learning-v2`
+- `iterative-retrieval`
+- `strategic-compact`
+- `skill-create`
 
-| 技能 | 路径 | 描述 |
-|------|------|------|
-| `api-design` | `skills/api-design/` | REST API 设计模式 |
-| `backend-patterns` | `skills/backend-patterns/` | 后端架构模式 |
+这部分是 ECC 比较有代表性的特色：它不只想“帮你写完一次”，还想把会话中的模式沉淀成以后能复用的能力。
 
-#### 8. 安全
+#### 5. 运营 / 文档 / 研究型能力
 
-| 技能 | 路径 | 描述 |
-|------|------|------|
-| `security-review` | `skills/security-review/` | 综合安全检查清单 |
-| `security-scan` | `skills/security-scan/` | Claude Code 配置安全审计 |
+随着 ECC 扩展，skills 已经不局限于编码本身，还出现了：
 
-#### 9. 高级功能
+- 文档查询与更新
+- 市场研究与内容生产
+- 运营类工作流
+- 视频与发布内容生成
+- workspace / social / billing / project flow 等扩展面
 
-| 技能 | 路径 | 描述 |
-|------|------|------|
-| `continuous-learning-v2` | `skills/continuous-learning-v2/` | 基于直觉的学习系统 |
-| `iterative-retrieval` | `skills/iterative-retrieval/` | 子代理上下文细化 |
-| `strategic-compact` | `skills/strategic-compact/` | 手动上下文压缩建议 |
-| `skill-create` | `skills/skill-create/` | 从 git 历史生成技能 |
+这也是为什么现在更适合把 ECC 理解成“工作系统”而不是“代码助手配置包”。
 
-### 技能调用方式
+### Skill 和 Slash Command 的关系
 
-使用 Skill 工具调用：
+这里要特别区分两件事：
 
-```bash
-# 调用 TDD 工作流
-/skill tdd-workflow
+- **Skill**：能力定义，本质上是可复用工作流或知识块。
+- **Slash Command**：命令入口，是否存在、是否全局安装、是否带命名空间，取决于你的安装方式和当前 harness。
 
-# 调用 Python 代码审查
-/skill python-review
-
-# 调用安全审查
-/skill security-review
-```
-
-或使用斜杠命令（如有配置）：
-
-```bash
-/tdd           # TDD 工作流
-/e2e           # E2E 测试
-/code-review   # 代码审查
-```
+也就是说，不是每个 skill 都会天然对应一个 `/xxx` 命令。你看到某个 skill 存在，并不等于一定能直接用同名命令调用。
 
 ---
 
 ## 命令（Commands）
 
-斜杠命令是快速触发特定功能的快捷方式。
+命令是最常见的使用入口。当前上游已确认存在 **75 个命令文件**，其中命令速查中明确列出 **59 个全局 slash commands**。
 
-### 常用命令列表
+原始目录：<https://github.com/affaan-m/ECC/tree/main/commands>
 
-#### 规划与执行
+### 最核心的一组命令
 
-| 命令 | 功能 |
-|------|------|
-| `/plan` | 创建实现计划（调用 planner 代理） |
-| `/multi-plan` | 多代理任务分解 |
-| `/multi-execute` | 编排多代理工作流 |
-
-#### 测试驱动开发
-
-| 命令 | 功能 |
-|------|------|
-| `/tdd` | 启动 TDD 工作流 |
-| `/e2e` | 生成端到端测试 |
-| `/go-test` | Go TDD 工作流 |
-
-#### 代码审查
-
-| 命令 | 功能 |
-|------|------|
-| `/code-review` | 通用代码审查 |
-| `/go-review` | Go 代码审查 |
-| `/python-review` | Python 代码审查 |
+| 命令 | 作用 |
+| ------ | ------ |
+| `/plan` | 先澄清需求、识别风险、给出实现计划 |
+| `/tdd` | 启动测试驱动开发流程 |
+| `/code-review` | 做完整代码审查 |
 | `/build-fix` | 修复构建错误 |
-| `/go-build` | 修复 Go 构建错误 |
+| `/verify` | 跑验证循环：构建、测试、类型检查等 |
+| `/e2e` | 生成并执行端到端测试 |
+| `/quality-gate` | 用项目标准做一次质量闸门检查 |
 
-#### 重构与清理
+### 现在新增或更值得关注的命令族
 
-| 命令 | 功能 |
-|------|------|
-| `/refactor-clean` | 移除死代码和未使用的导入 |
-| `/verify` | 运行验证循环 |
+#### 1. 测试与覆盖率
 
-#### 学习系统
+- `/test-coverage`
+- `/go-test`
+- `/kotlin-test`
+- `/rust-test`
+- `/cpp-test`
 
-| 命令 | 功能 |
-|------|------|
-| `/learn` | 从当前会话提取模式 |
-| `/instinct-status` | 显示学习的直觉及置信度 |
-| `/instinct-export` | 导出直觉供团队共享 |
-| `/instinct-import` | 从他人导入直觉 |
-| `/evolve` | 将相关直觉聚类到技能 |
-| `/skill-create` | 从 git 历史生成技能文件 |
+#### 2. 语言专项审查与构建修复
 
-#### 开发工具
+- `/python-review`
+- `/go-review`
+- `/kotlin-review`
+- `/rust-review`
+- `/cpp-review`
+- `/go-build`
+- `/kotlin-build`
+- `/rust-build`
+- `/cpp-build`
+- `/gradle-build`
 
-| 命令 | 功能 |
-|------|------|
-| `/setup-pm` | 配置包管理器（npm/pnpm/yarn/bun） |
-| `/pm2` | PM2 服务生命周期管理 |
-| `/sessions` | 会话历史管理 |
+#### 3. 多模型 / 多代理协作
+
+- `/multi-plan`
+- `/multi-execute`
+- `/multi-workflow`
+- `/multi-backend`
+- `/multi-frontend`
+- `/orchestrate`
+- `/devfleet`
+
+#### 4. 会话管理与上下文控制
+
+- `/save-session`
+- `/resume-session`
+- `/sessions`
+- `/checkpoint`
+- `/aside`
+- `/context-budget`
+
+#### 5. 学习、规则与治理
+
+- `/learn`
+- `/learn-eval`
+- `/evolve`
+- `/promote`
+- `/instinct-status`
+- `/instinct-export`
+- `/instinct-import`
+- `/skill-create`
+- `/skill-health`
+- `/rules-distill`
+
+#### 6. 文档、研究与基础设施
+
+- `/docs`
+- `/update-docs`
+- `/update-codemaps`
+- `/projects`
+- `/harness-audit`
+- `/eval`
+- `/model-route`
+- `/loop-start`
+- `/loop-status`
+- `/claw`
+- `/pm2`
+- `/setup-pm`
+
+### 如何理解命令的演进
+
+旧版介绍通常把命令理解为“快捷方式”。这个说法没错，但已经不够了。现在的 ECC 命令更像：
+
+- 某个 skill 的入口；
+- 某组 agent 编排的入口；
+- 某个跨会话 / 跨模型流程的入口；
+- 某类工程治理动作的入口。
+
+所以 `/plan`、`/verify`、`/harness-audit` 这类命令，背后不只是单次执行动作，而是完整工作流。
 
 ---
 
 ## 规则（Rules）
 
-规则是始终遵循的编码指南，影响 Claude Code 的行为。
+规则是始终遵循的编码与工作约束，用来把“项目偏好”和“最低安全线”固化下来。
 
-### 规则结构
+原始目录：<https://github.com/affaan-m/ECC/tree/main/rules>
 
-```
-rules/
-├── common/                    # 语言无关原则（必须安装）
-│   ├── coding-style.md       # 编码风格（不可变性、文件组织）
-│   ├── git-workflow.md       # Git 工作流
-│   ├── testing.md            # 测试要求（TDD、80% 覆盖率）
-│   ├── performance.md        # 性能优化
-│   ├── patterns.md           # 设计模式
-│   ├── hooks.md              # Hook 架构
-│   ├── agents.md             # 代理使用指南
-│   └── security.md           # 安全检查
-├── typescript/                # TypeScript 特定规则
-│   ├── coding-style.md
-│   ├── testing.md
-│   ├── patterns.md
-│   ├── hooks.md
-│   └── security.md
-├── python/                    # Python 特定规则
-│   ├── coding-style.md
-│   ├── testing.md
-│   ├── patterns.md
-│   ├── hooks.md
-│   └── security.md
-└── golang/                    # Go 特定规则
-    ├── coding-style.md
-    ├── testing.md
-    ├── patterns.md
-    ├── hooks.md
-    └── security.md
-```
+### 规则体系怎么理解
 
-### 核心规则要点
+ECC 的规则不再只是单文件集合，而是**多语言、可选择安装、按主题拆分**的体系。你通常会看到：
 
-#### 1. 编码风格（coding-style.md）
+- `common/`：通用规则
+- 各语言目录：例如 TypeScript、Python、Go、Rust、Java、C++ 等
+- 每种语言下再拆成 coding style、testing、patterns、security、hooks 等主题
 
-- **不可变性**：始终创建新对象，永不修改现有对象
-  - ❌ `modify(original, field, value)` - 原地修改
-  - ✅ `update(original, field, value)` - 返回新副本
-- **文件组织**：多小文件 > 少大文件；高内聚、低耦合
-- **文件大小**：典型 200-400 行，最多 800 行
+### 规则重点通常包括
 
-#### 2. 测试（testing.md）
+1. **编码风格**
+   - 倾向清晰、可维护、不过度抽象。
+   - 让生成代码更贴近项目约定。
 
-- 强制 TDD 方法论
-- 单元测试 + 集成测试 + E2E 测试
-- 最低 80% 覆盖率要求
+2. **测试要求**
+   - 强调 TDD、覆盖率、验证循环。
+   - 不是“代码写完后再补一点测试”，而是把测试前移到开发流程中。
 
-#### 3. 安全（security.md）
+3. **安全要求**
+   - 防止 secrets 泄露。
+   - 校验用户输入。
+   - 避免 SQL 注入、XSS、认证配置错误等问题。
 
-每次提交前必须检查：
-- [ ] 无硬编码 secrets（API keys、passwords、tokens）
-- [ ] 所有用户输入已验证
-- [ ] SQL 注入防护（参数化查询）
-- [ ] XSS 防护（HTML 净化）
-- [ ] CSRF 防护已启用
-- [ ] 认证/授权已验证
-- [ ] 所有端点有速率限制
-- [ ] 错误消息不泄露敏感数据
+4. **Hook 约束**
+   - 控制何时自动运行格式化、类型检查、会话持久化、学习提取等行为。
 
-#### 4. Git 工作流（git-workflow.md）
+5. **项目工作流**
+   - 规范提交、审查、验证和文档更新方式。
 
-- 提交信息格式：类型(范围): 描述
-- 保持小而专注的提交
-- 使用功能分支工作流
+如果你只想“借用 ECC 的一部分能力”，rules 往往是最适合按需摘取的部分之一。
 
 ---
 
 ## 钩子（Hooks）
 
-钩子是基于事件触发的自动化脚本。
+钩子是基于事件触发的自动化脚本，是 ECC 很重要的一层，因为很多“会自己发生的行为”其实都来自 hooks。
 
-### 钩子类型
+原始目录：<https://github.com/affaan-m/ECC/tree/main/hooks>
+
+### 常见触发时机
 
 | 触发器 | 执行时机 |
-|--------|----------|
+| -------- | ---------- |
 | `PreToolUse` | 工具执行前 |
 | `PostToolUse` | 工具执行后 |
 | `PreCompact` | 上下文压缩前 |
 | `SessionStart` | 会话开始时 |
 | `SessionEnd` | 会话结束时 |
-| `Stop` | 停止时 |
+| `Stop` | 会话停止或中止时 |
 
-### 功能性钩子
+### 钩子主要解决什么问题
 
-| 钩子 | 功能 |
-|------|------|
-| `post-edit-format.js` | 编辑后自动格式化（Prettier） |
-| `post-edit-typecheck.js` | TypeScript 类型检查 |
-| `post-edit-console-warn.js` | 警告 console.log 使用 |
-| `check-console-log.js` | 检查控制台日志泄露 |
-| `session-start.js` | 加载会话上下文 |
-| `session-end.js` | 保存会话状态 |
-| `suggest-compact.js` | 建议手动上下文压缩 |
-| `evaluate-session.js` | 从会话中提取模式 |
+- 自动格式化或检查改动
+- 提醒上下文预算与压缩时机
+- 保存 / 恢复会话信息
+- 从当前会话提取可复用模式
+- 对高风险命令做额外检查
+- 让不同 harness 的行为尽量一致
+
+### 当前 ECC 的 hook 特点
+
+较新的 ECC 版本更强调：
+
+- 脚本化 hook，而不是脆弱的一行命令；
+- 通过运行时参数控制启用级别；
+- 兼容不同平台与不同 harness；
+- 把记忆持久化、学习提取和流程提醒纳入自动化链路。
 
 ---
 
@@ -343,174 +583,152 @@ rules/
 
 ### 1. 新功能开发
 
-```
-# 用户请求
-实现一个用户认证系统
+```text
+用户请求：实现一个用户认证系统
 
-# 自动触发的工作流
-1. /plan "添加用户认证"
-   → planner 分析需求，创建详细的实施计划
-   → 识别依赖：数据库表、JWT 机制、密码加密
-   → 等待用户确认
+1. /plan
+   → 先澄清需求、识别风险、生成实施路线
 
-2. 用户确认后
-   /tdd
-   → tdd-guide 强制测试优先
-   → 编写用户旅程测试 → 测试失败 → 实现代码 → 测试通过 → 重构
+2. /tdd
+   → 先写失败测试，再实现功能，再通过测试
 
-3. 开发过程中
-   → code-reviewer 自动审查代码质量
+3. /code-review
+   → 检查可维护性、安全性与回归风险
 
-4. 完成前
-   /e2e
-   → e2e-runner 生成关键用户流的 E2E 测试
+4. /verify
+   → 跑完整验证循环
 
-5. 部署前
-   /security-scan
-   → security-reviewer 安全审计
+5. /update-docs
+   → 如果改动影响用户使用方式或项目结构，同步文档
 ```
 
-### 2. Bug 修复
+### 2. 修复构建或类型错误
 
-```
-# 用户请求
-修复登录页面无法提交表单的问题
+```text
+项目突然无法构建
 
-# 工作流
-/tdd
-→ tdd-guide: 编写一个复现 bug 的失败测试
-→ 实现修复
-→ 验证测试通过
-
-→ code-reviewer: 捕获可能的回归
+/build-fix
+→ 自动识别语言与问题类型
+→ 如有需要再切到 /go-build、/rust-build、/gradle-build 等专项命令
+→ 修完后用 /verify 做收尾
 ```
 
-### 3. 代码审查
+### 3. 需要更严格的代码质量把关
 
-```
-# 通用审查
+```text
+功能已经能跑，但你担心质量与风险
+
 /code-review
-
-# Go 项目
-/go-review
-
-# Python 项目
-/python-review
-
-# 数据库相关
-/database-review
+/security-review 或 /security-scan
+/quality-gate
 ```
 
-### 4. 死代码清理
+这三类入口组合起来，比较接近“提交前 final pass”。
 
+### 4. 多模型 / 多代理并行协作
+
+```text
+需求较大、任务面很多
+
+/multi-plan
+→ 从多个模型或多个视角拆方案
+
+/multi-execute 或 /multi-workflow
+→ 并行推进不同部分
+
+/orchestrate 或 /devfleet
+→ 在更复杂的场景下统一协调多个 agent
 ```
-/refactor-clean
-→ refactor-cleaner: 分析死代码、孤独导出、未使用导入
-→ 执行清理，保持功能完整
+
+### 5. 会话跨天继续
+
+```text
+今天先做到这里
+/save-session
+/checkpoint
+
+明天继续
+/resume-session
 ```
 
-### 5. 学习与知识积累
+### 6. 边做边沉淀经验
 
-```
-# 查看当前学习到的直觉
-/instinct-status
-
-# 将会话中的模式提取为可重用技能
+```text
+/learn
+/learn-eval
 /evolve
-
-# 导出技能供团队使用
-/instinct-export
-
-# 从团队成员导入技能
-/instinct-import
 ```
 
-### 6. Go 项目开发
-
-```
-# 创建新功能
-/plan "添加支付功能"
-→ planner 分析并创建计划
-
-# 开发
-/go-test
-→ golang-testing: TDD 工作流，带表驱动测试
-
-# 审查
-/go-review
-→ go-reviewer: 检查惯用语、并发安全、错误处理
-
-# 修复构建错误
-/go-build
-→ go-build-resolver: 最小改动修复构建问题
-```
-
-### 7. Python/Django 项目
-
-```
-# Django 项目
-/django-patterns    # 查看 Django 最佳实践
-/django-tdd         # Django TDD 工作流
-/django-verification # 验证：迁移、lint、测试、覆盖率
-
-# Python 通用
-/python-patterns    # Pythonic 惯用语
-/python-review      # PEP 8 审查
-```
+这个链路体现了 ECC 的一个核心思路：把一次成功会话里的模式，逐步转化为以后能复用的能力资产。
 
 ---
 
 ## 快速参考表
 
-### 场景 → 动作映射
+### 场景 → 推荐入口
 
-| 场景 | 推荐命令/技能 |
-|------|--------------|
+| 场景 | 推荐命令 / 文档 |
+| ------ | -------------- |
 | 开始新功能 | `/plan` |
-| 修复 Bug | `/tdd` |
-| 写测试 | `/tdd` |
+| 按测试优先推进开发 | `/tdd` |
 | E2E 测试 | `/e2e` |
 | 代码审查 | `/code-review` |
-| 安全检查 | `/security-scan` 或 `/security-review` |
-| 清理死代码 | `/refactor-clean` |
-| 修复构建错误 | `/build-fix` |
-| 部署前验证 | `/verify` |
-| 学习代码库 | 使用 Explore agent |
-| Go 开发 | `/go-review`, `/go-test`, `/go-build` |
-| Python 开发 | `/python-review`, `python-patterns` |
-| Django 开发 | `django-patterns`, `django-tdd` |
-| Spring Boot | `springboot-patterns`, `springboot-tdd` |
-| 数据库优化 | `postgres-patterns`, `database-review` |
-| 学习会话模式 | `/evolve`, `/instinct-status` |
+| 安全检查 | `/security-scan`、`/security-review` |
+| 修构建错误 | `/build-fix` |
+| 语言专项修构建 | `/go-build`、`/rust-build`、`/cpp-build`、`/gradle-build` |
+| 看覆盖率缺口 | `/test-coverage` |
+| 发布前做质量闸门 | `/quality-gate` |
+| 保存 / 恢复会话 | `/save-session`、`/resume-session` |
+| 控制上下文预算 | `/context-budget` |
+| 学习与沉淀模式 | `/learn-eval`、`/evolve` |
+| 多代理并行 | `/multi-plan`、`/multi-execute`、`/orchestrate` |
+| 查当前库/API 文档 | `/docs` |
+| 更新项目文档 | `/update-docs` |
+| 查故障排查 | `docs/TROUBLESHOOTING.md` |
+| 理解整体方法论 | `the-shortform-guide.md`、`the-longform-guide.md` |
 
-### 语言 → 专用代理/技能
+### 语言 / 任务 → 常见专项入口
 
-| 语言 | 代理 | 技能 |
-|------|------|------|
-| TypeScript | `code-reviewer` | `frontend-patterns` |
-| Python | `python-reviewer` | `python-patterns`, `python-testing` |
-| Go | `go-reviewer`, `go-build-resolver` | `golang-patterns`, `golang-testing` |
-| Java | - | `java-coding-standards`, `jpa-patterns` |
-| C++ | - | `cpp-testing` |
-| Django | - | `django-patterns`, `django-tdd`, `django-security` |
-| Spring Boot | - | `springboot-patterns`, `springboot-tdd`, `springboot-security` |
+| 方向 | 典型入口 |
+| ------ | ------ |
+| Python | `/python-review`、`python-patterns` |
+| Go | `/go-review`、`/go-test`、`/go-build` |
+| Kotlin | `/kotlin-review`、`/kotlin-test`、`/kotlin-build` |
+| Rust | `/rust-review`、`/rust-test`、`/rust-build` |
+| C++ | `/cpp-review`、`/cpp-test`、`/cpp-build` |
+| Django | `django-patterns`、`django-tdd`、`django-security`、`django-verification` |
+| Spring Boot | `springboot-patterns`、`springboot-tdd`、`springboot-security`、`springboot-verification` |
+| 数据库 | `postgres-patterns`、`database-reviewer` |
+| 前端 | `frontend-patterns`、`/e2e` |
 
 ---
 
 ## 关键原则
 
-1. **测试优先**：使用 `/tdd` 启动任何新功能开发
-2. **安全第一**：所有涉及用户输入、认证、API 的功能使用 `/security-review`
-3. **代码质量**：完成功能后使用 `/code-review` 或对应语言审查
-4. **持续学习**：使用 `/evolve` 从成功的工作流中创建可重用技能
-5. **验证检查**：生产部署前运行 `/verify`
+1. **先澄清再动手**：复杂需求先 `/plan`，不要一上来就改代码。
+2. **测试优先**：能走 TDD 就优先 `/tdd`。
+3. **验证闭环**：开发完成后不要只看“能跑”，还要 `/verify` 或 `/quality-gate`。
+4. **安全前置**：任何涉及用户输入、认证、依赖、配置的改动，都应该经过安全视角检查。
+5. **把经验沉淀下来**：ECC 的特色不只是帮你完成任务，而是把成功模式转成可复用资产。
+6. **把它理解为系统，不只是命令包**：Agent、Skill、Command、Rule、Hook、Harness 之间是联动的。
 
 ---
 
 ## 更多信息
 
-- 项目 GitHub: https://github.com/affaan-m/everything-claude-code
-- 配置目录: `everything-claude-code/`
-- 规则目录: `rules/`
-- 技能目录: `skills/`
-- 代理目录: `agents/`
+- 上游项目 GitHub：<https://github.com/affaan-m/ECC>
+- 当前说明仓库：<https://github.com/Chasen-Liao/Everything-claude-code-Doc>
+- 当前同步到本地的上游副本：[`everything-claude-code/`](everything-claude-code/)
+- 上游英文 README：<https://github.com/affaan-m/ECC/blob/main/README.md>
+- 上游中文 README：<https://github.com/affaan-m/ECC/blob/main/README.zh-CN.md>
+- Agents 原始目录：<https://github.com/affaan-m/ECC/tree/main/agents>
+- Skills 原始目录：<https://github.com/affaan-m/ECC/tree/main/skills>
+- Rules 原始目录：<https://github.com/affaan-m/ECC/tree/main/rules>
+- Hooks 原始目录：<https://github.com/affaan-m/ECC/tree/main/hooks>
+- Commands 原始目录：<https://github.com/affaan-m/ECC/tree/main/commands>
+- 命令速查：<https://github.com/affaan-m/ECC/blob/main/COMMANDS-QUICK-REF.md>
+- 长文指南：<https://github.com/affaan-m/ECC/blob/main/the-longform-guide.md>
+- 短文指南：<https://github.com/affaan-m/ECC/blob/main/the-shortform-guide.md>
+- 安全指南：<https://github.com/affaan-m/ECC/blob/main/the-security-guide.md>
+- 故障排查：<https://github.com/affaan-m/ECC/blob/main/docs/TROUBLESHOOTING.md>
+- Hermes 安装：<https://github.com/affaan-m/ECC/blob/main/docs/HERMES-SETUP.md>
