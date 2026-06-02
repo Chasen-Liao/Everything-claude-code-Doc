@@ -69,3 +69,17 @@ git add everything-claude-code
 `.claude/skills/sync-upstream-zh-docs/SKILL.md` 把"同步上游 → 量化变化 → 扫描顶层中文文档过期项 → 精准修改"整条链路编码成了单一 skill。
 
 当用户说"同步上游 / 刷新中文文档 / 维护教程"，或观察到上游 `VERSION` 变化、agents/skills/commands 计数漂移时，**先调用该 skill**，再按它的指引执行。它内部已包含易错点（gitlink 写回、59 vs 79、CRLF 警告等）。
+
+## Pages 站点维护
+
+本仓库的中文教程通过 GitHub Pages + MkDocs Material 发布。关键事实：
+
+- 站点 URL：<https://Chasen-Liao.github.io/Everything-claude-code-Doc/>
+- 源目录：`docs/`，MkDocs 配置 `mkdocs.yml`。
+- 上游 gitlink `everything-claude-code/` 通过 `exclude_docs` 排除，**不进 build**。
+- CI 工作流：`.github/workflows/deploy-pages.yml`，仅在 `docs/**`、`mkdocs.yml`、`requirements.txt` 变更时触发。
+- 一次性迁移脚本 `scripts/migrate_docs.py` 已完成首版迁移，**默认不重跑**——后续编辑直接修 `docs/` 下文件即可。
+- 顶层 `README.md`、`ECC-COMMANDS-ZH.md`、`ECC-NAVIGATION-ZH.md` 是 Pages 站点的门牌，不再是权威正文。改它们不会触发 Pages 重建。
+- 本地预览：`python -m mkdocs serve`，严格构建：`python -m mkdocs build --strict`。
+
+注意：编辑 `docs/` 下文件时，链接形态要遵守站内相对路径或 `https://github.com/affaan-m/ECC/...` 上游 URL 二选一，**禁止再引入 `everything-claude-code/...` 形态的相对路径**。
