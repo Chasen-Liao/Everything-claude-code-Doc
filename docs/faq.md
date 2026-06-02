@@ -4,15 +4,15 @@
 
 ### 我应该先看哪个文件？
 
-如果你是第一次接触 ECC，先看本页，再看 [ECC-COMMANDS-ZH.md](../commands/index.md)，然后看 [ECC-NAVIGATION-ZH.md](../upstream-navigation/index.md)。
+如果你是第一次接触 ECC，先看本页，再看 [ECC-COMMANDS-ZH.md](commands/index.md)，然后看 [ECC-NAVIGATION-ZH.md](upstream-navigation/index.md)。
 
 ### 我只想知道有哪些命令怎么办？
 
-先看 [ECC-COMMANDS-ZH.md](../commands/index.md)，再按需要对照 [`everything-claude-code/COMMANDS-QUICK-REF.md`](https://github.com/affaan-m/ECC/blob/main/COMMANDS-QUICK-REF.md)。
+先看 [ECC-COMMANDS-ZH.md](commands/index.md)，再按需要对照 [`everything-claude-code/COMMANDS-QUICK-REF.md`](https://github.com/affaan-m/ECC/blob/main/COMMANDS-QUICK-REF.md)。
 
 ### 我只想知道上游副本里该从哪里读起？
 
-直接看 [ECC-NAVIGATION-ZH.md](../upstream-navigation/index.md)，它就是为这个目的准备的。
+直接看 [ECC-NAVIGATION-ZH.md](upstream-navigation/index.md)，它就是为这个目的准备的。
 
 ### 我想把 ECC 的一部分抄到自己的项目里？
 
