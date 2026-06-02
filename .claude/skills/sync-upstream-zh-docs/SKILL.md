@@ -53,9 +53,9 @@ grep -nE "63 agents|249 skills|79 legacy|59 slash" README.md
 ### 3. 扫描顶层中文文档中的过期项
 
 ```bash
-grep -nE "60 个|232 个|75 个|60 |232 |75 " README.md ECC-COMMANDS-ZH.md ECC-NAVIGATION-ZH.md
-grep -nE "react|React" README.md
-grep -nE "go-reviewer|python-reviewer|java-reviewer|typescript-reviewer" README.md
+grep -rnE "60 个|232 个|75 个|60 |232 |75 " README.md ECC-COMMANDS-ZH.md ECC-NAVIGATION-ZH.md docs/
+grep -rnE "react|React" README.md docs/
+grep -rnE "go-reviewer|python-reviewer|java-reviewer|typescript-reviewer" README.md docs/
 ```
 
 最容易过期的几类：
@@ -80,11 +80,11 @@ grep -nE "go-reviewer|python-reviewer|java-reviewer|typescript-reviewer" README.
 
 ```bash
 # 应为空
-grep -nE "60 个代理|232 个技能|75 个命令文件" README.md
+grep -rnE "60 个代理|232 个技能|75 个命令文件" README.md docs/
 # 59 应保留
-grep -nE "59 个" README.md ECC-COMMANDS-ZH.md
-# React 应至少出现 4 处
-grep -cE "react|React" README.md
+grep -rnE "59 个" README.md ECC-COMMANDS-ZH.md docs/
+# React 应至少出现 4 处（含 docs/ 站点页）
+grep -crE "react|React" README.md docs/
 ```
 
 ### 5. 汇报
@@ -104,6 +104,7 @@ grep -cE "react|React" README.md
 - **仅 fast-forward**。除非用户明确要求，不要 rebase 或非 ff merge——`everything-claude-code` 是嵌入式 clone，重写历史会让与上游的 diff 变得不可读。
 - **Windows CRLF 警告**是 `core.autocrlf` 的正常提示，不要去改文件换行。
 - **不替换 README.zh-CN.md**：那是上游的中文 README，由上游维护；本仓库只维护顶层的 `README.md` 等三份教程。
+- **Pages 站点拆分页里的同步计数也要一起改**。`docs/` 下的章节同样含有 59 / 79 / 63 / 249 这类计数。刷新顶层三份 .md 时，必须把 `docs/**/*.md` 的同步计数一起改。否则会出现"顶层 README 已更新但 Pages 站点显示旧数"的不一致。
 
 ## 相关参考
 
