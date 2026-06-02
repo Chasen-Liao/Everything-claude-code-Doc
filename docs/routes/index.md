@@ -14,7 +14,7 @@
 ### 路线 2：想尽快学会怎么用
 
 1. [`ECC-COMMANDS-ZH.md`](../commands/index.md)
-2. 本页的“实际工作流示例”
+2. [实际工作流示例](../commands/workflow-examples.md)
 3. [`everything-claude-code/COMMANDS-QUICK-REF.md`](https://github.com/affaan-m/ECC/blob/main/COMMANDS-QUICK-REF.md)
 4. [`everything-claude-code/the-shortform-guide.md`](https://github.com/affaan-m/ECC/blob/main/the-shortform-guide.md)
 

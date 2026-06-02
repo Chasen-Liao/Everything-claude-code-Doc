@@ -81,6 +81,7 @@ nav:
       - 最常用: commands/most-used.md
       - 按场景: commands/by-scenario.md
       - 按语言: commands/by-language.md
+      - 工作流示例: commands/workflow-examples.md
   - 上游副本导航:
       - 总览: upstream-navigation/index.md
       - 按目录: upstream-navigation/by-directory.md
