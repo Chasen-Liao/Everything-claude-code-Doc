@@ -22,8 +22,12 @@ LINK_RULES: list[tuple[re.Pattern[str], Callable[[re.Match[str]], str]]] = [
         lambda m: f"[{m.group(1)}]({UPSTREAM_BASE}/blob/main/{m.group(2)})",
     ),
     (
-        re.compile(r"\[([^\]]+)\]\(everything-claude-code/([^)]+/)\)"),
-        lambda m: f"[{m.group(1)}]({UPSTREAM_BASE}/tree/main/{m.group(2)})",
+        re.compile(r"\[([^\]]+)\]\(everything-claude-code/(.*?)(/)?\)"),
+        lambda m: (
+            f"[{m.group(1)}]({UPSTREAM_BASE}/tree/main/{m.group(2)}{'/' if m.group(2) else ''})"
+            if m.group(3) or not m.group(2)
+            else f"[{m.group(1)}]({UPSTREAM_BASE}/blob/main/{m.group(2)})"
+        ),
     ),
     (
         re.compile(r"\[([^\]]+)\]\(everything-claude-code/([^)/]+)\)"),

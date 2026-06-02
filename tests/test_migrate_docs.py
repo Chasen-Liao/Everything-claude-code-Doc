@@ -66,6 +66,13 @@ def test_rewrite_links_multiple_in_one_line():
     assert rewrite_links(text) == expected
 
 
+def test_rewrite_links_root_directory():
+    text = "see [root](everything-claude-code/) here"
+    assert rewrite_links(text) == (
+        "see [root](https://github.com/affaan-m/ECC/tree/main/) here"
+    )
+
+
 # -----------------------
 # parse_h2_sections
 # -----------------------
