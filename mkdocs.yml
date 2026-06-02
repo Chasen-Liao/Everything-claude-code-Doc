@@ -1,0 +1,66 @@
+site_name: Everything Claude Code 中文教程
+site_url: https://Chasen-Liao.github.io/Everything-claude-code-Doc/
+site_description: ECC（Everything Claude Code）的中文教程镜像与导读
+repo_url: https://github.com/Chasen-Liao/Everything-claude-code-Doc
+repo_name: Chasen-Liao/Everything-claude-code-Doc
+edit_uri: edit/main/docs/
+
+docs_dir: docs
+exclude_docs: |
+  superpowers/**
+  everything-claude-code/**
+
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+    - content.action.edit
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-sunny
+        name: 切换到深色
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: 切换到浅色
+  font:
+    text: Noto Sans SC
+    code: JetBrains Mono
+
+plugins:
+  - search:
+      lang:
+        - zh
+        - en
+  - tags
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+extra_css:
+  - assets/extra.css
