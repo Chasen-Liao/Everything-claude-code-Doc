@@ -64,3 +64,26 @@ markdown_extensions:
 
 extra_css:
   - assets/extra.css
+
+nav:
+  - 首页: index.md
+  - 入门:
+      - ECC 是什么: getting-started/what-is-ecc.md
+      - 适合谁看: getting-started/who-is-this-for.md
+      - 快速开始: getting-started/quickstart.md
+  - 核心概念:
+      - 总览: concepts/overview.md
+      - 组件:Agent/Skill/Command: concepts/agent-vs-skill-vs-command.md
+      - 常见误解: concepts/misconceptions.md
+  - 阅读路线: routes/index.md
+  - 命令速查:
+      - 总览: commands/index.md
+      - 最常用: commands/most-used.md
+      - 按场景: commands/by-scenario.md
+      - 按语言: commands/by-language.md
+  - 上游副本导航:
+      - 总览: upstream-navigation/index.md
+      - 按目录: upstream-navigation/by-directory.md
+  - 维护:
+      - 与上游同步: maintenance/sync-upstream.md
+  - 常见问题: faq.md
