@@ -1,1 +1,56 @@
-/* 中文字体与排版微调预留。首版留空。 */
+/* ==========================================================================
+   Everything Claude Code 中文教程 —— 自定义样式
+   作用:补齐 Material 主题在中文场景下的字体/行高/字距/深色代码块细节
+   ========================================================================== */
+
+/* --- 1. 字体回退链:Windows 上 Noto Sans SC 不一定装,显式补齐 --- */
+:root {
+  --md-text-font: "Noto Sans SC", "PingFang SC", "Microsoft YaHei",
+                  "Hiragino Sans GB", system-ui, -apple-system, sans-serif;
+  --md-code-font: "JetBrains Mono", "Cascadia Code", "Fira Code",
+                  "Source Code Pro", "Sarasa Mono SC", Consolas, monospace;
+
+  /* Material 默认 1.6,中文 1.7 更舒展 */
+  --md-typeset-line-height: 1.7;
+
+  /* 段落与列表间距,缓解中文"挤"的问题 */
+  --md-typeset-spacing: 1.2em;
+}
+
+.md-typeset p,
+.md-typeset li,
+.md-typeset blockquote {
+  letter-spacing: 0.01em;
+}
+
+/* --- 2. 代码块:防止 JetBrains Mono 的连字在中文旁变怪 --- */
+.md-typeset code,
+.md-typeset pre {
+  font-feature-settings: "calt" 0, "liga" 0;
+}
+
+/* --- 3. 深色模式:slate 主题下代码块背景略亮,压一档让眼睛不累 --- */
+[data-md-color-scheme="slate"] .md-typeset code,
+[data-md-color-scheme="slate"] .md-typeset pre {
+  background-color: #1e2128;
+}
+
+/* --- 4. 首页 Grid Cards:让卡片 hover 时"会浮起来" --- */
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid.cards > ol > li {
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+}
+.md-typeset .grid.cards > ul > li:hover,
+.md-typeset .grid.cards > ol > li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li:hover,
+[data-md-color-scheme="slate"] .md-typeset .grid.cards > ol > li:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* --- 5. 标题:让 H2/H3 之间有更清晰的层级节奏 --- */
+.md-typeset h2 {
+  margin-top: 2.2em;
+}
