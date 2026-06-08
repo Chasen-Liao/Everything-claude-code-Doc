@@ -118,7 +118,7 @@ ECC 的 skill 已经很多，不适合在一篇导读里完整罗列。更好的
 
 ## 命令（Commands）
 
-命令是最常见的使用入口。当前上游已确认存在 **79 个命令文件**（其中包括 `legacy-command-shims/` 下的兼容别名），命令速查中明确列出 **59 个全局 slash commands**。
+命令是最常见的使用入口。当前上游已确认存在 **84 个命令文件**（其中包括 `legacy-command-shims/` 下的兼容别名），命令速查中明确列出 **59 个全局 slash commands**。
 
 原始目录：<https://github.com/affaan-m/ECC/tree/main/commands>
 

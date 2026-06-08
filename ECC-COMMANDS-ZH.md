@@ -7,7 +7,7 @@
 - 按场景：<https://Chasen-Liao.github.io/Everything-claude-code-Doc/commands/by-scenario/>
 - 按语言：<https://Chasen-Liao.github.io/Everything-claude-code-Doc/commands/by-language/>
 
-> 当前上游公开说明为 **59 个全局 slash commands**，命令文件共 **79 个**（含 `legacy-command-shims/` 兼容别名）。
+> 当前上游公开说明为 **59 个全局 slash commands**，命令文件共 **84 个**（含 `legacy-command-shims/` 兼容别名）。
 
 ## 原始来源
 

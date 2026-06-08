@@ -55,13 +55,32 @@
 ## 上游状态
 
 !!! note "权威计数(随上游更新)"
-    - Agents: **63** · Skills: **249** · Commands: **59** slash + 79 legacy shims
-    - 镜像 SHA: pinned at `64cd1ba2`(上游 `2.0.0-rc.1`)
-    - 最后同步:<!--SYNC_DATE-->请运行 sync-upstream-zh-docs 技能后回填<!--END-->
+    - Agents: **64** · Skills: **261** · Commands: **59** slash + 84 legacy shims
+    - 镜像 SHA: pinned at `90dfd950`(上游 `2.0.0-rc.1`)
+    - 最后同步:2026-06-08
 
 !!! tip "回到上游"
     本教程层只解释、串联;**所有权威定义、命令原文、配置示例,请回 [`affaan-m/ECC`](https://github.com/affaan-m/ECC) 仓库阅读。**
     站内"上游副本导航"分组的 [`upstream-navigation/by-directory.md`](upstream-navigation/by-directory.md) 提供了完整目录索引。
+
+## 读者分流
+
+按你现在最想解决的问题挑一个入口:
+
+- **第一次听说 ECC**:从 [ECC 是什么](getting-started/what-is-ecc.md) 读起,再看 [适合谁看](getting-started/who-is-this-for.md)。
+- **装好 ECC 但概念分不清**:直接看 [核心概念 · 总览](concepts/overview.md) 与 [组件:Agent / Skill / Command](concepts/agent-vs-skill-vs-command.md),再扫一眼 [常见误解](concepts/misconceptions.md)。
+- **只想查某条命令怎么用**:去 [命令速查 · 总览](commands/index.md),需要时再对照 [最常用](commands/most-used.md)、[按场景](commands/by-scenario.md)、[按语言](commands/by-language.md) 三个视图。
+- **要在上游副本里找原始定义或文件**:看 [上游副本导航 · 总览](upstream-navigation/index.md) 与 [按目录](upstream-navigation/by-directory.md)。
+- **要维护本仓库、跟上游对齐**:看 [与上游同步](maintenance/sync-upstream.md)。
+
+## 仓库结构
+
+本仓库分两层,各自承担不同职责:
+
+- **教程层(本仓库维护)**:`docs/` 下的中文教程,由 GitHub Pages 渲染成当前站点。`README.md`、`ECC-COMMANDS-ZH.md`、`ECC-NAVIGATION-ZH.md` 三份顶层文档只是入口门牌,权威解释都在站点里。
+- **上游同步层(上游维护)**:[`everything-claude-code/`](https://github.com/affaan-m/ECC/tree/main/) 是上游 ECC 的本地 gitlink 副本,目录名、文件内容、版本号都由上游决定,本仓库只做 fast-forward 同步,不直接编辑。
+
+简单记法:**教程层负责讲清楚,同步层负责给原文。**
 
 ## 常见问题
 
