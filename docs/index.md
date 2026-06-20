@@ -55,9 +55,9 @@
 ## 上游状态
 
 !!! note "权威计数(随上游更新)"
-    - Agents: **64** · Skills: **261** · Commands: **59** slash + 84 legacy shims
-    - 镜像 SHA: pinned at `90dfd950`(上游 `2.0.0-rc.1`)
-    - 最后同步:2026-06-08
+    - Agents: **67** · Skills: **271** · Commands: **59** slash + 92 legacy shims
+    - 镜像 SHA: pinned at `34faa39b`(上游 `2.0.0`)
+    - 最后同步:2026-06-21
 
 !!! tip "回到上游"
     本教程层只解释、串联;**所有权威定义、命令原文、配置示例,请回 [`affaan-m/ECC`](https://github.com/affaan-m/ECC) 仓库阅读。**

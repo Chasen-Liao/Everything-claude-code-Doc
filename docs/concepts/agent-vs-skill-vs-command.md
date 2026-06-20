@@ -21,7 +21,7 @@
 | `e2e-runner` | 生成并执行 E2E 测试 |
 | `doc-updater` | 更新文档、校正文档与实现的一致性 |
 | `docs-lookup` | 查文档、API、配置说明 |
-| `go-reviewer` / `python-reviewer` / `java-reviewer` / `typescript-reviewer` / `react-reviewer` | 语言专项代码审查 |
+| `go-reviewer` / `python-reviewer` / `java-reviewer` / `typescript-reviewer` / `react-reviewer` / `vue-reviewer` | 语言专项代码审查 |
 | `go-build-resolver` / `cpp-build-resolver` / `java-build-resolver` / `kotlin-build-resolver` / `react-build-resolver` | 语言专项构建修复 |
 | `loop-operator` | 循环式任务执行与持续操作 |
 | `harness-optimizer` | 优化 agent harness 的配置与使用方式 |
@@ -118,7 +118,7 @@ ECC 的 skill 已经很多，不适合在一篇导读里完整罗列。更好的
 
 ## 命令（Commands）
 
-命令是最常见的使用入口。当前上游已确认存在 **84 个命令文件**（其中包括 `legacy-command-shims/` 下的兼容别名），命令速查中明确列出 **59 个全局 slash commands**。
+命令是最常见的使用入口。当前上游已确认存在 **92 个命令文件**（其中包括 `legacy-command-shims/` 下的兼容别名），命令速查中明确列出 **59 个全局 slash commands**。
 
 原始目录：<https://github.com/affaan-m/ECC/tree/main/commands>
 
@@ -153,6 +153,7 @@ ECC 的 skill 已经很多，不适合在一篇导读里完整罗列。更好的
 - `/rust-review`
 - `/cpp-review`
 - `/react-review`
+- `/vue-review`
 - `/go-build`
 - `/kotlin-build`
 - `/rust-build`
@@ -231,7 +232,7 @@ ECC 的 skill 已经很多，不适合在一篇导读里完整罗列。更好的
 ECC 的规则不再只是单文件集合，而是**多语言、可选择安装、按主题拆分**的体系。你通常会看到：
 
 - `common/`：通用规则
-- 各语言目录：例如 TypeScript、Python、Go、Rust、Java、C++、React、Angular、Kotlin、Dart、Swift、Ruby、PHP、Perl、C#、F# 等
+- 各语言目录：例如 TypeScript、Python、Go、Rust、Java、C++、React、Vue、Nuxt、Angular、Kotlin、Dart、Swift、Ruby、PHP、Perl、C#、F# 等
 - 每种语言下再拆成 coding style、testing、patterns、security、hooks 等主题
 
 ### 规则重点通常包括

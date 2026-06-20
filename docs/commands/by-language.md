@@ -34,6 +34,7 @@
 | Rust | `/rust-review`、`/rust-test`、`/rust-build` |
 | C++ | `/cpp-review`、`/cpp-test`、`/cpp-build` |
 | React | `/react-review`、`/react-test`、`/react-build` |
+| Vue | `/vue-review`、`vue-patterns` |
 | Django | `django-patterns`、`django-tdd`、`django-security`、`django-verification` |
 | Spring Boot | `springboot-patterns`、`springboot-tdd`、`springboot-security`、`springboot-verification` |
 | 数据库 | `postgres-patterns`、`database-reviewer` |

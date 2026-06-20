@@ -7,7 +7,7 @@
 ## 什么时候看这页
 
 - 上游 `affaan-m/ECC` 发了新 release，或 `everything-claude-code/VERSION` 文件值变了。
-- 本仓库核心概念页 [核心概念](../concepts/overview.md) 里的 64/261/84/59 数字与上游对不上。
+- 本仓库核心概念页 [核心概念](../concepts/overview.md) 里的 67/271/92/59 数字与上游对不上。
 - 顶层 `README.md` / `ECC-COMMANDS-ZH.md` / `ECC-NAVIGATION-ZH.md` 提到的命令数、代理数、专项语言行明显落后。
 - GitHub Pages 构建失败，或站点上某条命令的链接 404。
 
@@ -50,7 +50,7 @@ cat VERSION   # 看看版本号有没有跳
 
 ### 步骤 2：量化变化
 
-用四个目录的文件数对照上游自己公开的同步面。当前权威数字（已与 `docs/concepts/overview.md` 对齐）：**64 agents、261 skills、84 command shims、59 global slash commands**。
+用四个目录的文件数对照上游自己公开的同步面。当前权威数字（已与 `docs/concepts/overview.md` 对齐）：**67 agents、271 skills、92 command shims、59 global slash commands**。
 
 ```bash
 # 本仓库当前数量
@@ -60,7 +60,7 @@ done
 
 # 上游 README 头部声明的权威数量
 cd everything-claude-code
-grep -nE "64 agents|261 skills|84 legacy|59 slash" README.md
+grep -nE "67 agents|271 skills|92 legacy|59 slash" README.md
 ```
 
 如果本地 `ls | wc -l` 与上游 README 数字对不上，说明上游可能刚改了表头；先看上游 diff，确认是否也要调整本仓库的引用。
@@ -69,7 +69,7 @@ grep -nE "64 agents|261 skills|84 legacy|59 slash" README.md
 
 最容易过期的几类内容：
 
-- 核心概念表的 64/261/84/59 数字（参考 [`docs/concepts/overview.md`](../concepts/overview.md)）。
+- 核心概念表的 67/271/92/59 数字（参考 [`docs/concepts/overview.md`](../concepts/overview.md)）。
 - 顶层 `README.md` 中对命令、代理、技能数量的复述段落。
 - "代理表 / 命令表 / 规则章节"里"语言专项"行——上游新增语言轨道时，本仓库最容易漏改。
 - 快速参考表的"语言/任务 → 常见专项入口"表。
@@ -127,7 +127,7 @@ git commit -m "chore(sync): fast-forward everything-claude-code to <new-sha>"
 !!! warning "易错点"
 
     - **`everything-claude-code/` 是 gitlink，不是普通子目录。** 主仓库的 git index 里它是 mode 160000 的 gitlink，且**没有 `.gitmodules` 映射**。子目录里工作树推进不会自动写回主仓库，必须在主仓库 `git add everything-claude-code`。
-    - **84 与 59 是两个不同的数。** `commands/` 目录是 84 个命令文件（含 `legacy-command-shims/` 兼容别名）；`COMMANDS-QUICK-REF.md` 头部声明的是 59 个全局 slash commands。两者不可互换，看到"59"时不要改成"84"。
+    - **92 与 59 是两个不同的数。** `commands/` 目录是 92 个命令文件（含 `legacy-command-shims/` 兼容别名）；`COMMANDS-QUICK-REF.md` 头部声明的是 59 个全局 slash commands。两者不可互换，看到"59"时不要改成"92"。
     - **只 fast-forward，不要 rebase 或 non-ff merge。** 重写历史会让以后与上游的 diff 不可读。
     - **Windows CRLF 警告是 `core.autocrlf` 的正常表现。** 子仓库 diff 里偶尔会出现这种警告，不要去改文件换行。
     - **不要修改 `everything-claude-code/README.zh-CN.md`。** 那是上游的中文 README，由上游维护；本仓库只维护顶层 `README.md` 和 `docs/` 下的教程。
@@ -148,11 +148,11 @@ git commit -m "chore(sync): fast-forward everything-claude-code to <new-sha>"
     - **`git merge --ff-only` 报 "Not possible to fast-forward"**：上游历史被重写过。**停下来**，不要 force 同步；去上游仓库看是否发了带 force-push 的 release 通告，必要时手动调整。
     - **CI Pages 构建失败**：先本地 `python -m mkdocs build --strict` 复现；常见原因是 `docs/` 里新加的页忘了进 `mkdocs.yml` 的 `nav`。
     - **Pages 站点没更新**：检查 push 触发的 workflow run，确认 `paths` 过滤命中（`docs/**`、`mkdocs.yml`、`requirements.txt` 三者之一变化才会触发）。
-    - **数字和上游对不上**：先 `cat everything-claude-code/VERSION` 和 `grep -nE "64 agents|261 skills|84 legacy" everything-claude-code/README.md`；权威数以上游 README 公开声明为准，本仓库的所有引用都要跟着它走。
+    - **数字和上游对不上**：先 `cat everything-claude-code/VERSION` 和 `grep -nE "67 agents|271 skills|92 legacy" everything-claude-code/README.md`；权威数以上游 README 公开声明为准，本仓库的所有引用都要跟着它走。
 
 ## 相关参考
 
-- [核心概念](../concepts/overview.md) —— 64/261/84/59 这几个数字的当前引用面。
+- [核心概念](../concepts/overview.md) —— 67/271/92/59 这几个数字的当前引用面。
 - 仓库根目录 [`CLAUDE.md`](https://github.com/Chasen-Liao/Everything-claude-code-Doc/blob/main/CLAUDE.md) —— 仓库 AI 指南，包含 gitlink 与同步面说明。
 - [`everything-claude-code/README.md`](https://github.com/affaan-m/everything-claude-code/blob/main/README.md) —— 数量权威来源。
 - [`everything-claude-code/CHANGELOG.md`](https://github.com/affaan-m/everything-claude-code/blob/main/CHANGELOG.md) —— 上游版本历史。
@@ -172,7 +172,7 @@ git rev-list --left-right --count HEAD...origin/main
 for d in agents skills commands rules; do echo -n "$d: "; ls $d | wc -l; done
 
 # 上游 README 公开声明的权威数
-grep -nE "64 agents|261 skills|84 legacy|59 slash" README.md
+grep -nE "67 agents|271 skills|92 legacy|59 slash" README.md
 
 # 当前上游版本
 cat VERSION

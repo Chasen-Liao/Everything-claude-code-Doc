@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 这是 `affaan-m/Everything Claude Code (ECC)` 的**中文教程镜像仓库**，分两层：
 
 - **顶层教程层（本仓库维护）**：`README.md`、`ECC-COMMANDS-ZH.md`、`ECC-NAVIGATION-ZH.md` 三份中文文档，负责解释、串联、给出阅读路径。
-- **上游同步层**：`everything-claude-code/`，是上游 ECC 的嵌入式 gitlink 克隆（当前 pinned 在上游 SHA `64cd1ba2`，上游版本 `2.0.0-rc.1`），其内容由上游管，本仓库只做同步。
+- **上游同步层**：`everything-claude-code/`，是上游 ECC 的嵌入式 gitlink 克隆（当前 pinned 在上游 SHA `34faa39b`，上游版本 `2.0.0`），其内容由上游管，本仓库只做同步。
 
 权威定义始终以上游为准；本仓库的"教程层"只翻译/梳理/对齐计数，不复制完整原始文档。
 

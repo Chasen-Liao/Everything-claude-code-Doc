@@ -18,7 +18,7 @@
 
 **读者画像**：ECC 已经装好（或者你能照 `install.sh` / `install.ps1` 跑通），但分不清 agent、skill、command、rule、hook 各自做什么。**时间预算**：30 分钟。**适用场景**：你准备真正开始用 ECC，但不想一上来就被命令速查里几十个 `/xxx` 淹没。
 
-1. 先用 10 分钟读 [核心概念 · 总览](../concepts/overview.md)，把那张组件表读透：64 agents / 261 skills / 84 commands / 59 global slash commands 是怎么对上的。
+1. 先用 10 分钟读 [核心概念 · 总览](../concepts/overview.md)，把那张组件表读透：67 agents / 271 skills / 92 commands / 59 global slash commands 是怎么对上的。
 2. 用 10 分钟读 [Agent / Skill / Command 等组件](../concepts/agent-vs-skill-vs-command.md)，重点看"使用代理的方式"和"Skill 和 Slash Command 的关系"两节，这两个是最容易混淆的点。
 3. 用 5 分钟过 [常见误解](../concepts/misconceptions.md)，把"skill 和 slash command 是一回事吗"这种典型误解清掉。
 4. 用 5 分钟在 [按目录读上游副本](../upstream-navigation/by-directory.md) 里挑 3 个目录点开看真东西：建议先看 `agents/`、`skills/`、`commands/`，体会每个目录的"粒度感"。
@@ -43,7 +43,7 @@
 
 1. 先用 15 分钟读仓库根目录的 [`CLAUDE.md`](https://github.com/Chasen-Liao/Everything-claude-code-Doc/blob/main/CLAUDE.md)，把"`everything-claude-code/` 是 gitlink 而不是普通子目录"、"59 和 79 不要混用"、"只编辑顶层三份中文文档"这几条非显然事实记牢。
 2. 用 20 分钟读 [与上游同步](../maintenance/sync-upstream.md)，按里面给的 fast-forward 流程跑一次：子仓库 `git fetch origin` → `git merge --ff-only origin/main` → 主仓库 `git add everything-claude-code`。先确认你能把上游推进并写回新 SHA。
-3. 用 15 分钟读 [上游 CHANGELOG](https://github.com/affaan-m/ECC/blob/main/CHANGELOG.md)，看本次同步里 agents / skills / commands / rules 数量是否有变；如果变了，回到 [核心概念 · 总览](../concepts/overview.md) 和 [命令速查 · 总览](../commands/index.md) 对齐数字（64 / 261 / 84 / 59 是权威来源，不要改）。
+3. 用 15 分钟读 [上游 CHANGELOG](https://github.com/affaan-m/ECC/blob/main/CHANGELOG.md)，看本次同步里 agents / skills / commands / rules 数量是否有变；如果变了，回到 [核心概念 · 总览](../concepts/overview.md) 和 [命令速查 · 总览](../commands/index.md) 对齐数字（67 / 271 / 92 / 59 是权威来源，不要改）。
 4. 用 20 分钟做一次全站巡检：跑 `mkdocs build --strict`，按警告去修内部链接、缺失引用、路径形式。编辑 `docs/` 时只允许"站内相对路径"或"上游 GitHub URL"两种形态，禁止 `everything-claude-code/...` 形态的相对路径（这条在 `CLAUDE.md` 的 Pages 站点维护一节写明）。
 5. 用 20 分钟做发布前复核：检查 [FAQ](../faq.md)、[快速开始](../getting-started/quickstart.md)、[阅读路线](../routes/index.md)（即本页）三处是否还有与上游漂移的措辞或死链，再决定是否发版。
 
