@@ -21,15 +21,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 主仓库要写回新 SHA，必须 `git add everything-claude-code` 然后再 commit。
 - 推进方式只能 fast-forward，不要 rebase 或非 ff merge——重写历史会让与上游的 diff 变得不可读。
 
-### `59` 和 `79` 是两个不同的数
+### `59` 和 `92` 是两个不同的数
 
-- `everything-claude-code/commands/` 目录下是 **79 个命令文件**（含 `legacy-command-shims/` 的兼容别名）。
+- `everything-claude-code/commands/` 目录下是 **92 个命令文件**（含 `legacy-command-shims/` 的兼容别名）。
 - `everything-claude-code/COMMANDS-QUICK-REF.md` 列的是 **59 个全局 slash commands**。
-- 两者不可互换；上层中文文档提到"59"时不要改成"79"，反之亦然。
+- 两者不可互换；上层中文文档提到"59"时不要改成"92"，反之亦然。
 
 ### 上游 README 公开承诺的同步面
 
-`agents / skills / commands` 数量与 `everything-claude-code/README.md` 里的 "63 agents, 249 skills, 79 legacy command shims" 对齐。`README.md` 第 126、397、1428 行是这几组数字的权威来源。
+`agents / skills / commands / rules` 数量与 `everything-claude-code/README.md` 里的 "67 agents, 271 skills, 92 legacy command shims" 对齐。`README.md` 第 442、1529、1531 行是这几组数字的权威来源。
 
 ## 维护工作流（最常用命令）
 
@@ -42,7 +42,7 @@ git merge --ff-only origin/main
 
 # 2. 量化变化、对齐权威计数
 for d in agents skills commands rules; do echo -n "$d: "; ls $d | wc -l; done
-grep -nE "63 agents|249 skills|79 legacy|59 slash" README.md
+grep -nE "67 agents|271 skills|92 legacy|59 slash" README.md
 
 # 3. 回到主仓库写回新 SHA 并按需刷新顶层中文文档
 cd ..

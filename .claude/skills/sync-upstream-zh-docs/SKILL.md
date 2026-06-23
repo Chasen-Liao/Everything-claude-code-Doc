@@ -45,10 +45,10 @@ git diff --name-status <old-sha>..HEAD -- agents/ skills/ commands/ rules/
 git diff --stat <old-sha>..HEAD -- README.md README.zh-CN.md COMMANDS-QUICK-REF.md VERSION
 
 # 上游 README 自己声明的权威数量
-grep -nE "63 agents|249 skills|79 legacy|59 slash" README.md
+grep -nE "67 agents|271 skills|92 legacy|59 slash" README.md
 ```
 
-把 `agents / skills / commands / rules` 数量与上游 README 头部声明的 "63 agents, 249 skills, 79 legacy command shims" 对齐——这是上游自己公开承诺的同步面。
+把 `agents / skills / commands / rules` 数量与上游 README 当前权威行 "67 agents, 271 skills, 92 legacy command shims" 对齐——这是上游 `README.md` L442 的实时声明。
 
 ### 3. 扫描顶层中文文档中的过期项
 
@@ -61,12 +61,12 @@ grep -rnE "go-reviewer|python-reviewer|java-reviewer|typescript-reviewer" README
 最容易过期的几类：
 
 - 核心概念表的 agents / skills / commands 数量
-- 文中对命令数量的复述（如"75 个命令文件" → "79 个命令文件"）
+- 文中对命令数量的复述（如"75 个命令文件" → "92 个命令文件"）
 - 代理表 / 命令表的"语言专项"行（新增语言轨道时遗漏）
 - 规则章节的"各语言目录"示例（新增语言目录时遗漏）
 - 快速参考表的"语言/任务 → 常见专项入口"表
 
-注意：`COMMANDS-QUICK-REF.md` 头部仍写 "59 slash commands installed globally"——这是**全局安装面**，不是命令文件数（`commands/` 目录下 79 个文件，差异在 `legacy-command-shims/` 与命名空间）。**59 不要改**。
+注意：`COMMANDS-QUICK-REF.md` 头部仍写 "59 slash commands installed globally"——这是**全局安装面**，不是命令文件数（`commands/` 目录下 92 个文件，差异在 `legacy-command-shims/` 与命名空间）。**59 不要改**。
 
 ### 4. 精准修改
 
@@ -109,7 +109,7 @@ grep -crE "react|React" README.md docs/
 ## 相关参考
 
 - `everything-claude-code/COMMANDS-QUICK-REF.md` —— 命令权威清单
-- `everything-claude-code/README.md` —— 数量权威来源（"63 agents, 249 skills, 79 legacy command shims"）
+- `everything-claude-code/README.md` —— 数量权威来源（"67 agents, 271 skills, 92 legacy command shims"）
 - `everything-claude-code/CHANGELOG.md` —— 上游版本历史
 - `everything-claude-code/VERSION` —— 当前上游版本
 - `README.md`（本仓库）—— 核心概念表、"现在的 ECC 和早期版本有什么不同"两节是过期高发区

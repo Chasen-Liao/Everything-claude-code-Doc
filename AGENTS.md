@@ -152,7 +152,7 @@ git add everything-claude-code   # 写回新 SHA 到主仓库
 - **不要编辑 `everything-claude-code/` 下任何文件**; 同步只能 fast-forward。
 - **不要在 `docs/*.md` 里使用 `everything-claude-code/...` 路径**; 用 `https://github.com/affaan-m/ECC/...`。
 - **不要混用 "59" 和 "79"**: 79 是 `commands/` 目录文件数(含 `legacy-command-shims/`), 59 是 `COMMANDS-QUICK-REF.md` 列的全局 slash command 数。
-- **不要把"63 agents / 249 skills / 79 legacy command shims"与"59 slash commands"混为一谈**: 前者是上游 README 公开承诺的同步面, 后者是全局安装数。
+- **不要把"67 agents / 271 skills / 92 legacy command shims"与"59 slash commands"混为一谈**: 前者是上游 README 当前权威行(`everything-claude-code/README.md` L442), 后者是 `COMMANDS-QUICK-REF.md` 头部声明的全局安装数。
 - **不要重跑 `python -m scripts.migrate_docs`**(首版已完成); 后续编辑直接改 `docs/`。
 - **不要修改 `LICENSE` 或 `everything-claude-code/README.zh-CN.md`**(上游维护)。
 - **不要用 `git rebase` / 非 ff merge** 推进 `everything-claude-code/`; diff 不可读。
