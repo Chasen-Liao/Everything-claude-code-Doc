@@ -29,11 +29,7 @@
   font-feature-settings: "calt" 0, "liga" 0;
 }
 
-/* --- 3. 深色模式:slate 主题下代码块背景略亮,压一档让眼睛不累 --- */
-[data-md-color-scheme="slate"] .md-typeset code,
-[data-md-color-scheme="slate"] .md-typeset pre {
-  background-color: #1e2128;
-}
+/* --- 3. 深色模式下的行内代码与代码块已通过全局 CSS 变量统一响应 --- */
 
 /* --- 4. 首页 Grid Cards:让卡片 hover 时"会浮起来" --- */
 .md-typeset .grid.cards > ul > li,
@@ -113,34 +109,66 @@
   font-weight: 700 !important;
   border-radius: 50px;
   text-decoration: none;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .hero-btn.primary-btn {
-  background-color: var(--md-typeset-a-color, #ff385c);
+  background-color: #ff385c;
   color: #fff !important;
-  box-shadow: 0 4px 12px rgba(255, 56, 92, 0.2);
+  box-shadow: 0 4px 12px rgba(255, 56, 92, 0.24);
 }
 .hero-btn.primary-btn:hover {
-  background-color: var(--md-accent-fg-color, #e31c5f);
+  background-color: #e31c5f;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 56, 92, 0.35);
+  box-shadow: 0 6px 16px rgba(255, 56, 92, 0.36);
+}
+.hero-btn.primary-btn:active {
+  background-color: #cf1953;
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 8px rgba(255, 56, 92, 0.2);
 }
 .hero-btn.secondary-btn {
-  border: 2px solid var(--md-typeset-a-color, #ff385c);
-  color: var(--md-typeset-a-color, #ff385c) !important;
+  border: 2px solid #ff385c;
+  color: #ff385c !important;
+  background-color: transparent;
 }
 .hero-btn.secondary-btn:hover {
-  background-color: var(--md-typeset-a-color, #ff385c);
-  color: #fff !important;
+  background-color: rgba(255, 56, 92, 0.05);
+  border-color: #e31c5f;
+  color: #e31c5f !important;
   transform: translateY(-2px);
 }
+.hero-btn.secondary-btn:active {
+  background-color: rgba(255, 56, 92, 0.1);
+  transform: translateY(0) scale(0.98);
+}
+[data-md-color-scheme="slate"] .hero-btn.primary-btn {
+  background-color: #ff5876;
+  color: #0d1117 !important;
+  box-shadow: 0 4px 12px rgba(255, 88, 118, 0.25);
+}
+[data-md-color-scheme="slate"] .hero-btn.primary-btn:hover {
+  background-color: #ff7a91;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 88, 118, 0.4);
+}
+[data-md-color-scheme="slate"] .hero-btn.primary-btn:active {
+  background-color: #e00b41;
+  transform: translateY(0) scale(0.98);
+}
 [data-md-color-scheme="slate"] .hero-btn.secondary-btn {
-  border-color: var(--md-accent-fg-color, #ff5876);
-  color: var(--md-accent-fg-color, #ff5876) !important;
+  border-color: #ff5876;
+  color: #ff5876 !important;
+  background-color: transparent;
 }
 [data-md-color-scheme="slate"] .hero-btn.secondary-btn:hover {
-  background-color: var(--md-accent-fg-color, #ff5876);
-  color: #0d1117 !important;
+  background-color: rgba(255, 88, 118, 0.08);
+  border-color: #ff7a91;
+  color: #ff7a91 !important;
+  transform: translateY(-2px);
+}
+[data-md-color-scheme="slate"] .hero-btn.secondary-btn:active {
+  background-color: rgba(255, 88, 118, 0.15);
+  transform: translateY(0) scale(0.98);
 }
 
 /* --- 7. 首页优化: 统计卡片 --- */
@@ -164,12 +192,12 @@
 .stats-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(255, 56, 92, 0.12);
-  border-color: var(--md-typeset-a-color, #ff385c);
+  border-color: #ff385c;
 }
 .stats-number {
   font-size: 2.4rem;
   font-weight: 800;
-  color: var(--md-typeset-a-color, #ff385c);
+  color: #ff385c;
   line-height: 1.2;
   margin-bottom: 0.15em;
 }
@@ -184,7 +212,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 [data-md-color-scheme="slate"] .stats-card:hover {
-  border-color: var(--md-accent-fg-color, #ff5876);
+  border-color: #ff5876;
   box-shadow: 0 8px 24px rgba(255, 88, 118, 0.15);
 }
 [data-md-color-scheme="slate"] .stats-number {
@@ -227,9 +255,9 @@
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .routing-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-  border-color: var(--md-typeset-a-color, #ff385c);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(31, 35, 40, 0.08);
+  border-color: rgba(0, 0, 0, 0.15);
 }
 .routing-card.routing-card-new { border-left-color: #ff385c; }
 .routing-card.routing-card-concept { border-left-color: #1a7f37; }
@@ -276,7 +304,7 @@
   border-radius: 4px;
   font-weight: 700;
 }
-.badge-new { background-color: rgba(255, 56, 92, 0.10); color: #c00a3a; }
+.badge-new { background-color: rgba(255, 56, 92, 0.10); color: #d93b58; }
 .badge-concept { background-color: rgba(26, 127, 55, 0.10); color: #1a7f37; }
 .badge-cmd { background-color: rgba(9, 105, 218, 0.10); color: #0969da; }
 .badge-dev { background-color: rgba(207, 34, 46, 0.10); color: #cf222e; }
@@ -315,7 +343,7 @@
   --md-accent-bg-color: #ffffff;
   --md-accent-bg-color--light: #ffffff;
   --md-typeset-color: #222222;
-  --md-typeset-a-color: #0969da;
+  --md-typeset-a-color: #c11c40; /* 浅色模式链接: 暗珊瑚红，对比度 4.53:1 */
   --md-default-fg-color: #222222;
   --md-default-fg-color--light: #6a6a6a;
   --md-default-fg-color--lighter: #6a6a6a;
@@ -343,6 +371,7 @@
   --md-accent-fg-color: #ff5876;
   --md-accent-fg-color--transparent: rgba(255, 88, 118, 0.12);
   --md-typeset-color: #e6edf3;
+  --md-typeset-a-color: #ff7a91; /* 深色模式链接: 亮珊瑚粉，对比度 4.85:1 */
   --md-default-fg-color: #e6edf3;
   --md-default-fg-color--light: #a8a8a8;
   --md-default-bg-color: #0d1117;
@@ -385,9 +414,24 @@
 .md-nav--primary .md-nav__link {
   font-weight: 500;
 }
+.md-nav__link:focus, .md-nav__link:hover {
+  color: #ff385c !important;
+}
+.md-nav--secondary .md-nav__link--active,
+.md-nav--secondary .md-nav__link--active:hover {
+  color: #ff385c !important;
+}
 [data-md-color-scheme="slate"] .md-nav--primary .md-nav__link--active,
 [data-md-color-scheme="slate"] .md-nav--primary .md-nav__link--active:hover {
   color: #ff5876;
+}
+[data-md-color-scheme="slate"] .md-nav__link:focus,
+[data-md-color-scheme="slate"] .md-nav__link:hover {
+  color: #ff5876 !important;
+}
+[data-md-color-scheme="slate"] .md-nav--secondary .md-nav__link--active,
+[data-md-color-scheme="slate"] .md-nav--secondary .md-nav__link--active:hover {
+  color: #ff5876 !important;
 }
 
 /* Body type — font-family 由 :root 的 Noto Sans SC 链控制(中文场景)
@@ -415,40 +459,29 @@
 
 /* Inline code */
 .md-typeset code {
-  background-color: #f6f8fa;
-  border: 1px solid #d8dee4;
+  background-color: var(--md-code-bg-color);
+  border: 1px solid var(--md-border-color);
   border-radius: 6px;
-  padding: 1px 6px;
-  color: #222222;
+  padding: 2px 6px;
+  color: var(--md-code-fg-color);
   font-weight: 500;
   font-size: 0.88em;
-}
-[data-md-color-scheme="slate"] .md-typeset code {
-  background-color: #161b22;
-  border-color: #30363d;
-  color: #e6edf3;
 }
 
 /* Code block */
 .md-typeset pre > code,
 .md-typeset .highlight pre,
 .md-typeset .codehilite pre {
-  background-color: #0d1117;
-  color: #e6edf3;
+  background-color: var(--md-code-bg-color);
+  color: var(--md-code-fg-color);
   border-radius: 12px;
-  border: 1px solid #d1d9e0;
+  border: 1px solid var(--md-border-color);
   padding: 16px 20px;
   font-family: "JetBrains Mono", "SF Mono", "Fira Code", ui-monospace,
     Menlo, Consolas, monospace;
   font-size: 13px;
   line-height: 1.65;
   font-weight: 500;
-}
-[data-md-color-scheme="slate"] .md-typeset pre > code,
-[data-md-color-scheme="slate"] .md-typeset .highlight pre,
-[data-md-color-scheme="slate"] .md-typeset .codehilite pre {
-  background-color: #0a0a0a;
-  border-color: #30363d;
 }
 
 /* Code block — line-numbered + copyable look */
@@ -457,39 +490,39 @@
   border-radius: 12px;
 }
 .md-typeset .highlighttable {
-  border: 1px solid #d1d9e0;
+  border: 1px solid var(--md-border-color);
   border-radius: 12px;
   overflow: hidden;
 }
 
 /* Tables */
 .md-typeset table:not([class]) {
-  border: 1px solid #d1d9e0;
+  border: 1px solid var(--md-border-color);
   border-radius: 12px;
   overflow: hidden;
   font-size: 14px;
 }
 .md-typeset table:not([class]) th {
-  background-color: #f6f8fa;
+  background-color: var(--md-default-bg-color--light);
   font-weight: 600;
-  color: #59636e;
+  color: var(--md-default-fg-color--light);
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 .md-typeset table:not([class]) td {
-  border-top: 1px solid #d8dee4;
+  border-top: 1px solid var(--md-border-color);
 }
 .md-typeset table:not([class]) tr:hover td {
-  background-color: #f6f8fa;
+  background-color: var(--md-default-bg-color--light);
 }
 
 /* Admonitions — soft surface, not heavy color blocks */
 .md-typeset .admonition,
 .md-typeset details {
-  border: 1px solid #d1d9e0;
+  border: 1px solid var(--md-border-color);
   border-radius: 12px;
-  background-color: #f6f8fa;
+  background-color: var(--md-default-bg-color--light);
   box-shadow: none;
   font-size: 14px;
   line-height: 1.6;
@@ -498,7 +531,7 @@
 .md-typeset details > summary {
   font-weight: 600;
   background-color: transparent;
-  border-bottom: 1px solid #d8dee4;
+  border-bottom: 1px solid var(--md-border-color);
 }
 .md-typeset .admonition.note,
 .md-typeset .admonition.info {
@@ -515,6 +548,22 @@
 .md-typeset .admonition.success,
 .md-typeset .admonition.tip {
   border-left: 3px solid #1a7f37;
+}
+[data-md-color-scheme="slate"] .md-typeset .admonition.note,
+[data-md-color-scheme="slate"] .md-typeset .admonition.info {
+  border-left-color: #58a6ff;
+}
+[data-md-color-scheme="slate"] .md-typeset .admonition.warning,
+[data-md-color-scheme="slate"] .md-typeset .admonition.caution {
+  border-left-color: #f0b429;
+}
+[data-md-color-scheme="slate"] .md-typeset .admonition.danger,
+[data-md-color-scheme="slate"] .md-typeset .admonition.failure {
+  border-left-color: #ff7b72;
+}
+[data-md-color-scheme="slate"] .md-typeset .admonition.success,
+[data-md-color-scheme="slate"] .md-typeset .admonition.tip {
+  border-left-color: #56d364;
 }
 
 /* Primary CTA buttons */
@@ -586,6 +635,7 @@
 [data-md-color-scheme="slate"] .md-footer {
   background-color: #161b22;
   border-top-color: #30363d;
+  color: var(--md-default-fg-color--light);
 }
 
 /* Focus ring — 2px Ink Black, Airbnb §6 spec */
@@ -604,6 +654,7 @@
   color: #222222;
 }
 [data-md-color-scheme="slate"] ::selection {
+  background-color: rgba(255, 88, 118, 0.35);
   color: #ffffff;
 }
 
@@ -635,6 +686,12 @@
 .md-typeset h3:hover .headerlink,
 .md-typeset h4:hover .headerlink {
   color: #ff385c;
+}
+[data-md-color-scheme="slate"] .md-typeset h1:hover .headerlink,
+[data-md-color-scheme="slate"] .md-typeset h2:hover .headerlink,
+[data-md-color-scheme="slate"] .md-typeset h3:hover .headerlink,
+[data-md-color-scheme="slate"] .md-typeset h4:hover .headerlink {
+  color: var(--md-accent-fg-color);
 }
 
 /* Reduce hover-state flash on links — keep type the only signal */
