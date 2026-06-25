@@ -84,6 +84,7 @@ extra_css:
 
 nav:
   - 首页: index.md
+  - 导读幻灯片: deck-intro.md
   - 入门:
       - ECC 是什么: getting-started/what-is-ecc.md
       - 适合谁看: getting-started/who-is-this-for.md

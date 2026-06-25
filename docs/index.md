@@ -3,6 +3,7 @@
   <p class="hero-subtitle">ECC (Everything Claude Code) 的中文导读、最佳实践与能力检索手册</p>
   <div class="hero-actions">
     <a href="getting-started/what-is-ecc/" class="hero-btn primary-btn">快速开始 →</a>
+    <a href="deck-intro/" class="hero-btn secondary-btn">幻灯片导读 📊</a>
     <a href="commands/" class="hero-btn secondary-btn">命令速查</a>
   </div>
   <p style="font-size: 0.85rem; margin: 0; opacity: 0.75; line-height: 1.6;">

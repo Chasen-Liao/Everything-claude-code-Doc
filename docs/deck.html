@@ -1,0 +1,963 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECC 笔记本 — Everything Claude Code 导读</title>
+<style>
+/* === FONTS === */
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;700&display=swap');
+
+/* ===========================================
+   DESIGN TOKENS — Notebook Tabs theme
+   Cream paper card on dark ground, colorful
+   index tabs on the right edge, binder holes
+   on the left. Bodoni Moda + DM Sans.
+   All values authored at 1920×1080 stage size.
+   =========================================== */
+:root {
+    /* Colors */
+    --bg-outer: #2d2d2d;
+    --bg-page: #f8f6f1;
+    --text-primary: #1a1a1a;
+    --text-secondary: #6b6358;
+    --rule: #d8d2c4;
+    --tab-1: #98d4bb;             /* Mint */
+    --tab-2: #c7b8ea;             /* Lavender */
+    --tab-3: #f4b8c5;             /* Pink */
+    --tab-4: #a8d8ea;             /* Sky */
+    --tab-5: #ffe6a7;             /* Cream */
+
+    /* Stage */
+    --stage-bg: var(--bg-outer);
+    --slide-bg: var(--bg-outer);
+
+    /* Typography */
+    --font-display: 'Bodoni Moda', 'Didot', serif;
+    --font-body: 'DM Sans', 'Helvetica Neue', sans-serif;
+    --title-size: 150px;
+    --h2-size: 84px;
+    --subtitle-size: 30px;
+    --body-size: 26px;
+    --label-size: 17px;
+
+    /* Paper geometry (inside the 1920×1080 stage) */
+    --paper-top: 56px;
+    --paper-bottom: 56px;
+    --paper-left: 120px;
+    --paper-right: 150px;
+    --paper-pad-x: 110px;
+    --paper-pad-y: 78px;
+
+    /* Motion */
+    --ease-page: cubic-bezier(0.16, 1, 0.3, 1);
+    --duration-normal: 0.7s;
+}
+
+/* === BASE === */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ===========================================
+   FIXED 16:9 STAGE: MANDATORY BASE STYLES
+   =========================================== */
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+.deck-viewport {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+.deck-stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: 0 0;
+    background: var(--slide-bg, #fff);
+}
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--slide-bg, #fff);
+}
+.slide.active,
+.slide.visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+}
+img, video, canvas, svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+.deck-controls {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+@media print {
+    html, body { width: 1920px; height: auto; overflow: visible; background: #fff; }
+    .deck-viewport { position: static; overflow: visible; background: #fff; }
+    .deck-stage { position: static; width: auto; height: auto; transform: none !important; background: none; }
+    .slide {
+        position: relative; display: block !important;
+        visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        width: 1920px; height: 1080px;
+        break-after: page; page-break-after: always;
+    }
+    .slide:last-child { break-after: auto; page-break-after: auto; }
+    .deck-controls { display: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
+    }
+    .reveal { transform: none !important; }
+    .bar { transform: none !important; }
+}
+
+/* ===========================================
+   THE NOTEBOOK — paper card, binder holes, tabs
+   =========================================== */
+.paper {
+    position: absolute;
+    top: var(--paper-top);
+    bottom: var(--paper-bottom);
+    left: var(--paper-left);
+    right: var(--paper-right);
+    background: var(--bg-page);
+    border-radius: 8px;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.25),
+        0 18px 50px rgba(0, 0, 0, 0.45),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+    background-image:
+        linear-gradient(rgba(26, 26, 26, 0.018) 1px, transparent 1px),
+        linear-gradient(180deg, var(--bg-page), var(--bg-page));
+    background-size: 100% 44px, 100% 100%;
+    z-index: 1;
+}
+
+.holes {
+    position: absolute;
+    left: 38px;
+    top: 90px;
+    bottom: 90px;
+    width: 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 3;
+}
+.holes span {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--bg-outer);
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.7),
+        0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.margin-rule {
+    position: absolute;
+    left: 92px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--tab-3);
+    opacity: 0.55;
+    z-index: 2;
+}
+
+.tabs {
+    position: absolute;
+    right: calc(var(--paper-right) - 44px);
+    top: calc(var(--paper-top) + 60px);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    z-index: 0;
+}
+.tab {
+    writing-mode: vertical-rl;
+    font-family: var(--font-body);
+    font-size: var(--label-size);
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(26, 26, 26, 0.78);
+    width: 56px;
+    height: 158px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 10px 10px 0;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+    opacity: 0.82;
+    transform: translateX(-6px);
+    transition: transform 0.45s var(--ease-page), opacity 0.45s var(--ease-page);
+}
+.tab-1 { background: var(--tab-1); }
+.tab-2 { background: var(--tab-2); }
+.tab-3 { background: var(--tab-3); }
+.tab-4 { background: var(--tab-4); }
+.tab-5 { background: var(--tab-5); }
+.tab.on { opacity: 1; transform: translateX(0); box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.35); }
+
+.page {
+    position: absolute;
+    inset: 0;
+    padding: var(--paper-pad-y) var(--paper-pad-x) var(--paper-pad-y) 150px;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+}
+
+.runhead {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--font-body);
+    font-size: var(--label-size);
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 18px;
+    margin-bottom: 40px;
+}
+.runhead .no { font-weight: 700; color: var(--text-primary); }
+.baseline {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-body);
+    font-size: 15px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--rule);
+    padding-top: 16px;
+}
+
+/* === TYPOGRAPHY === */
+.display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--title-size);
+    line-height: 0.98;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+}
+.h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--h2-size);
+    line-height: 1.04;
+    color: var(--text-primary);
+}
+.kicker {
+    font-family: var(--font-body);
+    font-size: var(--label-size);
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 22px;
+}
+.kicker .chip {
+    display: inline-block;
+    width: 30px;
+    height: 12px;
+    border-radius: 3px;
+    margin-right: 12px;
+    vertical-align: baseline;
+}
+.lede {
+    font-family: var(--font-body);
+    font-size: var(--subtitle-size);
+    line-height: 1.5;
+    color: var(--text-secondary);
+    max-width: 980px;
+}
+
+/* === SPEAKER NOTES (per-page, footer band) === */
+.notes {
+    position: absolute;
+    left: 150px;
+    right: 110px;
+    bottom: 122px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--rule);
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    z-index: 2;
+}
+.notes .nlabel {
+    display: inline-block;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: var(--text-primary);
+    margin-right: 14px;
+    opacity: 0.7;
+}
+
+/* === ENTRANCE ANIMATION === */
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity var(--duration-normal) var(--ease-page),
+                transform var(--duration-normal) var(--ease-page);
+}
+.slide.visible .reveal { opacity: 1; transform: translateY(0); }
+.reveal:nth-child(1), .reveal.d1 { transition-delay: 0.08s; }
+.reveal:nth-child(2), .reveal.d2 { transition-delay: 0.18s; }
+.reveal:nth-child(3), .reveal.d3 { transition-delay: 0.28s; }
+.reveal:nth-child(4), .reveal.d4 { transition-delay: 0.38s; }
+.reveal:nth-child(5), .reveal.d5 { transition-delay: 0.48s; }
+.reveal:nth-child(6), .reveal.d6 { transition-delay: 0.58s; }
+
+/* === COVER === */
+.cover-meta {
+    display: flex;
+    gap: 26px;
+    align-items: center;
+    font-family: var(--font-body);
+    font-size: 20px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-top: 44px;
+}
+.cover-swatches { display: flex; gap: 10px; }
+.cover-swatches i {
+    width: 44px; height: 18px; border-radius: 4px; display: inline-block;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.18);
+}
+.cover-edition {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 34px;
+    color: var(--text-secondary);
+    margin-top: 26px;
+    max-width: 980px;
+    line-height: 1.3;
+}
+
+/* === CONTENTS === */
+.toc { display: flex; flex-direction: column; margin-top: 8px; }
+.toc-row {
+    display: flex;
+    align-items: baseline;
+    gap: 26px;
+    padding: 26px 0;
+    border-bottom: 1px dashed var(--rule);
+    font-family: var(--font-body);
+}
+.toc-row:last-child { border-bottom: none; }
+.toc-chip { width: 38px; height: 16px; border-radius: 4px; flex: none; align-self: center; }
+.toc-no {
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    width: 64px;
+    flex: none;
+}
+.toc-title { font-family: var(--font-display); font-size: 40px; font-weight: 400; color: var(--text-primary); }
+.toc-dots { flex: 1; border-bottom: 2px dotted var(--rule); transform: translateY(-9px); }
+.toc-pg { font-size: 22px; letter-spacing: 0.18em; color: var(--text-secondary); }
+
+/* === SECTION DIVIDER === */
+.divider-no {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 430px;
+    line-height: 0.85;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--text-primary);
+}
+.divider-wrap { display: flex; align-items: center; gap: 90px; flex: 1; }
+.divider-side .h2 { margin-bottom: 24px; }
+.divider-bar { width: 120px; height: 16px; border-radius: 4px; margin-bottom: 34px; }
+
+/* === BULLETS === */
+.points { display: flex; flex-direction: column; gap: 30px; margin-top: 10px; }
+.point { display: flex; gap: 30px; align-items: flex-start; max-width: 1180px; }
+.point .pin {
+    flex: none;
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.18);
+}
+.point .pin svg { width: 26px; height: 26px; }
+.point h3 { font-family: var(--font-display); font-size: 36px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.point p { font-family: var(--font-body); font-size: var(--body-size); line-height: 1.5; color: var(--text-secondary); }
+
+/* === BIG STAT === */
+.stat-wrap { display: flex; align-items: center; gap: 90px; flex: 1; }
+.stat-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 300px;
+    line-height: 0.9;
+    color: var(--text-primary);
+}
+.stat-num .unit {
+    display: block;
+    font-size: 120px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1;
+    margin-top: 18px;
+    color: var(--text-secondary);
+}
+.stat-side { max-width: 560px; border-left: 4px solid var(--tab-1); padding-left: 44px; }
+.stat-side h3 { font-family: var(--font-display); font-size: 40px; font-weight: 700; margin-bottom: 16px; color: var(--text-primary); }
+.stat-side p { font-family: var(--font-body); font-size: var(--body-size); line-height: 1.55; color: var(--text-secondary); }
+
+/* === COMMAND LIST (6 rows) === */
+.cmd-list { display: flex; flex-direction: column; margin-top: 6px; }
+.cmd-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 300px;
+    gap: 36px;
+    padding: 22px 0;
+    border-bottom: 1px dashed var(--rule);
+    font-family: var(--font-body);
+    align-items: baseline;
+}
+.cmd-row:last-child { border-bottom: none; }
+.cmd-chip {
+    width: 14px; height: 14px; border-radius: 3px;
+    display: inline-block; margin-right: 14px;
+    vertical-align: baseline;
+    transform: translateY(2px);
+}
+.cmd-name {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+}
+.cmd-what {
+    font-size: 22px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+}
+.cmd-when {
+    font-size: 15px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-align: right;
+    line-height: 1.4;
+}
+
+/* === PRINCIPLE GRID 2×2 === */
+.grid4 { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-top: 12px; flex: 1; align-content: start; }
+.gcard {
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 32px 36px;
+    background: rgba(255, 255, 255, 0.45);
+    position: relative;
+    overflow: hidden;
+}
+.gcard::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 12px;
+    background: var(--edge, var(--tab-1));
+}
+.gcard h3 { font-family: var(--font-display); font-size: 30px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.gcard p { font-family: var(--font-body); font-size: 21px; line-height: 1.5; color: var(--text-secondary); }
+.gcard .gno {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 24px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+/* === CLOSING === */
+.close-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.close-wrap .display em { font-style: italic; font-weight: 400; }
+.close-links { display: flex; gap: 48px; margin-top: 50px; flex-wrap: wrap; }
+.lk {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--font-body);
+    font-size: 20px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    border-bottom: 3px solid var(--tab-3);
+    padding-bottom: 8px;
+}
+.lk svg { width: 24px; height: 24px; }
+
+/* === CTA BUTTON (Pages link) === */
+.cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 40px;
+    padding: 18px 34px;
+    background: var(--tab-1);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    transition: transform 0.3s var(--ease-page), box-shadow 0.3s var(--ease-page);
+    align-self: flex-start;
+}
+.cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.24);
+}
+.cta-btn svg { width: 22px; height: 22px; }
+
+/* === DECK CONTROLS === */
+.deck-controls {
+    font-family: var(--font-body);
+    font-size: 14px;
+    letter-spacing: 0.22em;
+    color: rgba(248, 246, 241, 0.55);
+    background: rgba(26, 26, 26, 0.55);
+    border: 1px solid rgba(248, 246, 241, 0.18);
+    padding: 8px 18px;
+    border-radius: 999px;
+    user-select: none;
+}
+.deck-controls .cur { color: var(--tab-1); font-weight: 700; }
+</style>
+<style id="od-no-pager">.deck-controls,#counter,.deck-counter{display:none!important}</style>
+</head>
+<body>
+<div class="deck-viewport">
+    <main class="deck-stage" id="deckStage" aria-label="ECC 导读幻灯片">
+
+        <!-- === SLIDE 1: COVER (Intro) === -->
+        <section class="slide active visible">
+            <div class="paper">
+                <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <div class="margin-rule"></div>
+                <div class="page">
+                    <div class="runhead"><span class="no">No. 01</span><span>ECC · 产品笔记本</span></div>
+                    <div class="close-wrap">
+                        <p class="kicker reveal d1"><span class="chip" style="background: var(--tab-1);"></span>一份给开发者的 ECC 导读笔记</p>
+                        <h1 class="display reveal d2">Everything<br>Claude <em style="font-weight:400;">Code</em></h1>
+                        <p class="cover-edition reveal d3">Anthropic 黑客马拉松获奖项目 · 把 Claude Code 从命令集合升级为 Agentic Coding harness</p>
+                        <div class="cover-meta reveal d4">
+                            <span>67 agents</span><span>·</span><span>271 skills</span><span>·</span>
+                            <span class="cover-swatches"><i style="background:var(--tab-1)"></i><i style="background:var(--tab-2)"></i><i style="background:var(--tab-3)"></i><i style="background:var(--tab-4)"></i><i style="background:var(--tab-5)"></i></span>
+                        </div>
+                    </div>
+                    <aside class="notes"><span class="nlabel">speaker notes</span>ECC 全称 Everything Claude Code，是 affaan-m/ECC 开源项目，Anthropic 黑客马拉松获奖作品。它不是配置文件集合，而是一整套为 AI 智能体协作量身定制的开发提效系统。开场用"67 / 271"两个数字勾起好奇，再展开讲规模与体系。</aside>
+                    <div class="baseline"><span>封面</span><span>github.com/affaan-m/ECC</span></div>
+                </div>
+            </div>
+            <div class="tabs" aria-hidden="true">
+                <span class="tab tab-1 on">Intro</span><span class="tab tab-2">System</span><span class="tab tab-3">Commands</span><span class="tab tab-4">Workflow</span><span class="tab tab-5">End</span>
+            </div>
+        </section>
+
+        <!-- === SLIDE 2: CONTENTS (Intro) === -->
+        <section class="slide">
+            <div class="paper">
+                <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <div class="margin-rule"></div>
+                <div class="page">
+                    <div class="runhead"><span class="no">No. 02</span><span>目录</span></div>
+                    <h2 class="h2 reveal d1" style="margin-bottom: 30px;">目录</h2>
+                    <div class="toc">
+                        <div class="toc-row reveal d2"><span class="toc-chip" style="background:var(--tab-2)"></span><span class="toc-no">i.</span><span class="toc-title">是什么 — Agentic Coding harness</span><span class="toc-dots"></span><span class="toc-pg">PG 03</span></div>
+                        <div class="toc-row reveal d3"><span class="toc-chip" style="background:var(--tab-2)"></span><span class="toc-no">ii.</span><span class="toc-title">基石 — Agent / Skill / Command / Rule / Hook</span><span class="toc-dots"></span><span class="toc-pg">PG 05</span></div>
+                        <div class="toc-row reveal d4"><span class="toc-chip" style="background:var(--tab-3)"></span><span class="toc-no">iii.</span><span class="toc-title">命令 — 6 个最常用入口</span><span class="toc-dots"></span><span class="toc-pg">PG 06</span></div>
+                        <div class="toc-row reveal d5"><span class="toc-chip" style="background:var(--tab-4)"></span><span class="toc-no">iv.</span><span class="toc-title">工作流 — 子 Agent 协作 + TDD / 调试</span><span class="toc-dots"></span><span class="toc-pg">PG 08</span></div>
+                    </div>
+                    <aside class="notes"><span class="nlabel">speaker notes</span>四个章节对应五个 tab 的后四个：System 讲体系与基石，Commands 讲日常入口，Workflow 讲协作模式。每章两页，节奏从概念到实践递进。</aside>
+                    <div class="baseline"><span>目录</span><span>02 / 10</span></div>
+                </div>
+            </div>
+            <div class="tabs" aria-hidden="true">
+                <span class="tab tab-1 on">Intro</span><span class="tab tab-2">System</span><span class="tab tab-3">Commands</span><span class="tab tab-4">Workflow</span><span class="tab tab-5">End</span>
+            </div>
+        </section>
+
+        <!-- === SLIDE 3: SECTION DIVIDER (System) === -->
+        <section class="slide">
+            <div class="paper">
+                <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <div class="margin-rule"></div>
+                <div class="page">
+                    <div class="runhead"><span class="no">No. 03</span><span>第 i 章</span></div>
+                    <div class="divider-wrap">
+                        <div class="divider-no reveal d1">01</div>
+                        <div class="divider-side">
+                            <div class="divider-bar reveal d2" style="background: var(--tab-2);"></div>
+                            <h2 class="h2 reveal d3">是什么 —<br>一套harness</h2>
+                            <p class="lede reveal d4" style="margin-top: 22px; max-width: 660px;">源自 Anthropic 黑客马拉松获奖项目，把代理、技能、命令、规则、钩子整合成一套可复用的 AI 协作工作系统。</p>
+                        </div>
+                    </div>
+                    <aside class="notes"><span class="nlabel">speaker notes</span>这一章建立整体认知：ECC 不是"命令包"，而是 agent harness performance system。强调"整合"——五个组件联动才形成系统，缺一不可。</aside>
+                    <div class="baseline"><span>是什么</span><span>03 / 10</span></div>
+                </div>
+            </div>
+            <div class="tabs" aria-hidden="true">
+                <span class="tab tab-1">Intro</span><span class="tab tab-2 on">System</span><span class="tab tab-3">Commands</span><span class="tab tab-4">Workflow</span><span class="tab tab-5">End</span>
+            </div>
+        </section>
+
+        <!-- === SLIDE 4: BIG STAT (System) === -->
+        <section class="slide">
+            <div class="paper">
+                <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <div class="margin-rule"></div>
+                <div class="page">
+                    <div class="runhead"><span class="no">No. 04</span><span>第 i 章 · 是什么</span></div>
+                    <div class="stat-wrap">
+                        <div class="stat-num reveal d1">67<span class="unit">子代理</span></div>
+                        <div class="stat-side reveal d2">
+                            <h3>内置 67 个专用子代理</h3>
+                            <p>planner、architect、tdd-guide、code-reviewer、security-reviewer、build-error-resolver、doc-updater 等。主代理把长任务委派给专家，避免单 Agent 跑偏，显著提升复杂任务的完成率。另有 271 个 skills、92 个 commands 在背后支撑。</p>
+                        </div>
+                    </div>
+                    <aside class="notes"><span class="nlabel">speaker notes</span>67 这个数字是核心锚点：原生 Claude Code 只有主代理，ECC 把它扩展成"专家团队"。补一句：还有 271 个 skills 和 92 个 commands，但 agents 是最直观的规模感。子代理既能被系统自动调度，也可以显式调用。</aside>
+                    <div class="baseline"><span>是什么</span><span>04 / 10</span></div>
+                </div>
+            </div>
+            <div class="tabs" aria-hidden="true">
+                <span class="tab tab-1">Intro</span><span class="tab tab-2 on">System</span><span class="tab tab-3">Commands</span><span class="tab tab-4">Workflow</span><span class="tab tab-5">End</span>
+            </div>
+        </section>
+
+        <!-- === SLIDE 5: BULLETS — 五大基石 (System) === -->
+        <section class="slide">
+            <div class="paper">
+                <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <div class="margin-rule"></div>
+                <div class="page">
+                    <div class="runhead"><span class="no">No. 05</span><span>第 i 章 · 是什么</span></div>
+                    <p class="kicker reveal d1"><span class="chip" style="background: var(--tab-2);"></span>五大基石</p>
+                    <h2 class="h2 reveal d2" style="font-size: 64px; margin-bottom: 34px;">Agent · Skill · Command<br>Rule · Hook</h2>
+                    <div class="points" style="gap: 20px;">
+                        <div class="point reveal d3">
+                            <span class="pin" style="background: var(--tab-1);"><svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
+                            <div><h3>Agent &amp; Skill — 专家 + 工作流</h3><p>子代理（Agent）是限定职责的专属 AI 角色；技能（Skill）是 271 个可复用工作流。两者配合让长任务被专业角色按标准流程完成。</p></div>
+                        </div>
+                        <div class="point reveal d4">
+                            <span class="pin" style="background: var(--tab-2);"><svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" y1="15" x2="15" y2="15"></line></svg></span>
+                            <div><h3>Command &amp; Rule — 入口 + 约束</h3><p>命令（/plan、/tdd 等）是工作流入口；规则（Rule）是始终生效的编码与安全约束，例如禁提交 console.log、强制类型检查。</p></div>
+                        </div>
+                        <div class="point reveal d5">
+                            <span class="pin" style="background: var(--tab-3);"><svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></span>
+                            <div><h3>Hook &amp; AgentShield — 自动化防御</h3><p>钩子（Hook）在工具调用前后、会话开始结束自动触发；AgentShield 做静态与动态安全审查，拦截配置漏洞与指令注入。</p></div>
+                        </div>
+                    </div>
+                    <aside class="notes"><span class="nlabel">speaker notes</span>五大基石分三层讲：Agent+Skill 是"做事的人"，Command+Rule 是"入口和规则"，Hook+AgentShield 是"自动防御"。强调它们联动：Rule 不是文档，是 AI 始终遵守的硬约束；Hook 不是脚本，是事件驱动的自动化层。</aside>
+                    <div class="baseline"><span>基石</span><span>05 / 10</span></div>
+                </div>
+            </div>
+            <div class="tabs" aria-hidden="true">
+                <span class="tab tab-1">Intro</span><span class="tab tab-2 on">System</span><span class="tab tab-3">Commands</span><span class="tab tab-4">Workflow</span><span class="tab tab-5">End</span>
+            </div>
+        </section>
+
+        <!-- === SLIDE 6: SECTION DIVIDER (Commands) === -->
+        <section class="slide">
+            <div class="paper">
+                <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <div class="margin-rule"></div>
+                <div class="page">
+                    <div class="runhead"><span class="no">No. 06</span><span>第 ii 章</span></div>
+                    <div class="divider-wrap">
+                        <div class="divider-no reveal d1">02</div>
+                        <div class="divider-side">
+                            <div class="divider-bar reveal d2" style="background: var(--tab-3);"></div>
+                            <h2 class="h2 reveal d3">命令 —<br>6 个日常入口</h2>
+                            <p class="lede reveal d4" style="margin-top: 22px; max-width: 660px;">92 个命令文件、59 个全局 slash commands 中，这 6 个是日常开发最高频的工作流入口。</p>
+                        </div>
+                    </div>
+                    <aside class="notes"><span class="nlabel">speaker notes</span>不要被 92 这个数字吓到，绝大多数开发者日常只需要这 6 个。它们各自对应一个完整工作流（不是单次动作）：/plan 背后是 planner agent + 风险识别，/verify 背后是 build/lint/test/type-check 全链路。</aside>
+                    <div class="baseline"><span>命令</span><span>06 / 10</span></div>
+                </div>
+            </div>
+            <div class="tabs" aria-hidden="true">
+                <span class="tab tab-1">Intro</span><span class="tab tab-2">System</span><span class="tab tab-3 on">Commands</span><span class="tab tab-4">Workflow</span><span class="tab tab-5">End</span>
+            </div>
+        </section>
+
+        <!-- === SLIDE 7: COMMAND LIST (Commands) === -->
+        <section class="slide">
+            <div class="paper">
+                <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <div class="margin-rule"></div>
+                <div class="page">
+                    <div class="runhead"><span class="no">No. 07</span><span>第 ii 章 · 命令</span></div>
+                    <p class="kicker reveal d1"><span class="chip" style="background: var(--tab-3);"></span>最常用的一组</p>
+                    <h2 class="h2 reveal d2" style="font-size: 56px; margin-bottom: 22px;">何时用哪个命令</h2>
+                    <div class="cmd-list">
+                        <div class="cmd-row reveal d3">
+                            <span class="cmd-name"><span class="cmd-chip" style="background:var(--tab-1)"></span>/plan</span>
+                            <span class="cmd-what">先澄清需求、识别风险、生成实施计划</span>
+                            <span class="cmd-when">需求不清 · 任务较大</span>
+                        </div>
+                        <div class="cmd-row reveal d3">
+                            <span class="cmd-name"><span class="cmd-chip" style="background:var(--tab-2)"></span>/tdd</span>
+                            <span class="cmd-what">先写失败测试，再实现，再验证覆盖率</span>
+                            <span class="cmd-when">测试优先推进</span>
+                        </div>
+                        <div class="cmd-row reveal d4">
+                            <span class="cmd-name"><span class="cmd-chip" style="background:var(--tab-3)"></span>/code-review</span>
+                            <span class="cmd-what">检查代码质量、安全、可维护性</span>
+                            <span class="cmd-when">代码写完后</span>
+                        </div>
+                        <div class="cmd-row reveal d4">
+                            <span class="cmd-name"><span class="cmd-chip" style="background:var(--tab-4)"></span>/build-fix</span>
+                            <span class="cmd-what">自动识别语言并修复常见构建问题</span>
+                            <span class="cmd-when">构建 / 类型 / 编译挂了</span>
+                        </div>
+                        <div class="cmd-row reveal d5">
+                            <span class="cmd-name"><span class="cmd-chip" style="background:var(--tab-5)"></span>/verify</span>
+                            <span class="cmd-what">跑完整验证循环：build、lint、test、type-check</span>
+                            <span class="cmd-when">改动准备收尾</span>
+                        </div>
+                        <div class="cmd-row reveal d5">
+                            <span class="cmd-name"><span class="cmd-chip" style="background:var(--tab-1)"></span>/quality-gate</span>
+                            <span class="cmd-what">按项目标准做提交前质量闸门检查</span>
+                            <span class="cmd-when">提交前最后一道闸</span>
+                        </div>
+                    </div>
+                    <aside class="notes"><span class="nlabel">speaker notes</span>6 个命令按"开发时序"排：先 /plan 想清楚，再 /tdd 写代码，/build-fix 救火，/code-review 审查，/verify 全链路验证，最后 /quality-gate 把关提交。这一张是速查表，建议观众拍照保存。</aside>
+                    <div class="baseline"><span>命令</span><span>07 / 10</span></div>
+                </div>
+            </div>
+            <div class="tabs" aria-hidden="true">
+                <span class="tab tab-1">Intro</span><span class="tab tab-2">System</span><span class="tab tab-3 on">Commands</span><span class="tab tab-4">Workflow</span><span class="tab tab-5">End</span>
+            </div>
+        </section>
+
+        <!-- === SLIDE 8: SECTION DIVIDER (Workflow) === -->
+        <section class="slide">
+            <div class="paper">
+                <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <div class="margin-rule"></div>
+                <div class="page">
+                    <div class="runhead"><span class="no">No. 08</span><span>第 iii 章</span></div>
+                    <div class="divider-wrap">
+                        <div class="divider-no reveal d1">03</div>
+                        <div class="divider-side">
+                            <div class="divider-bar reveal d2" style="background: var(--tab-4);"></div>
+                            <h2 class="h2 reveal d3">工作流 —<br>协作而非孤命令</h2>
+                            <p class="lede reveal d4" style="margin-top: 22px; max-width: 660px;">ECC 真正的杠杆在子 Agent 协作：把规划、开发、审查、修复、验证串成一条可编排的流水线。</p>
+                        </div>
+                    </div>
+                    <aside class="notes"><span class="nlabel">speaker notes</span>这一章是综合全景的"上手"部分。核心观念：不要把 /plan、/tdd、/code-review 当孤立命令，它们是子 Agent 协作链路上的节点。下一页用 2×2 网格展示典型链路。</aside>
+                    <div class="baseline"><span>工作流</span><span>08 / 10</span></div>
+                </div>
+            </div>
+            <div class="tabs" aria-hidden="true">
+                <span class="tab tab-1">Intro</span><span class="tab tab-2">System</span><span class="tab tab-3">Commands</span><span class="tab tab-4 on">Workflow</span><span class="tab tab-5">End</span>
+            </div>
+        </section>
+
+        <!-- === SLIDE 9: PRINCIPLE GRID 2×2 (Workflow) === -->
+        <section class="slide">
+            <div class="paper">
+                <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <div class="margin-rule"></div>
+                <div class="page">
+                    <div class="runhead"><span class="no">No. 09</span><span>第 iii 章 · 工作流</span></div>
+                    <p class="kicker reveal d1"><span class="chip" style="background: var(--tab-4);"></span>典型 ECC 协作链</p>
+                    <h2 class="h2 reveal d2" style="font-size: 56px; margin-bottom: 22px;">一条端到端的任务流水线</h2>
+                    <div class="grid4">
+                        <div class="gcard reveal d3" style="--edge: var(--tab-1);"><div class="gno">阶段 i</div><h3>规划</h3><p>planner 澄清需求、识别风险，architect 划边界、给权衡。先想清楚再动手。</p></div>
+                        <div class="gcard reveal d3" style="--edge: var(--tab-2);"><div class="gno">阶段 ii</div><h3>开发</h3><p>tdd-guide 强制测试优先，build-error-resolver 接管类型 / 编译错误，让循环不停摆。</p></div>
+                        <div class="gcard reveal d4" style="--edge: var(--tab-3);"><div class="gno">阶段 iii</div><h3>审查</h3><p>code-reviewer 查质量与可维护性，security-reviewer 扫漏洞与配置风险，双轨并行。</p></div>
+                        <div class="gcard reveal d4" style="--edge: var(--tab-4);"><div class="gno">阶段 iv</div><h3>验证</h3><p>/verify 跑 build / lint / test / type-check 全链路，/quality-gate 把提交前的最后一道闸。</p></div>
+                    </div>
+                    <aside class="notes"><span class="nlabel">speaker notes</span>四个阶段对应四组子 Agent：规划 / 开发 / 审查 / 验证。重点不是记住每个 agent 名字，而是理解"长任务被拆成可编排的链路"——这是 ECC 区别于原生 Claude Code 的核心增量。调试场景下 build-error-resolver 特别有用。</aside>
+                    <div class="baseline"><span>工作流</span><span>09 / 10</span></div>
+                </div>
+            </div>
+            <div class="tabs" aria-hidden="true">
+                <span class="tab tab-1">Intro</span><span class="tab tab-2">System</span><span class="tab tab-3">Commands</span><span class="tab tab-4 on">Workflow</span><span class="tab tab-5">End</span>
+            </div>
+        </section>
+
+        <!-- === SLIDE 10: CLOSING (End) === -->
+        <section class="slide">
+            <div class="paper">
+                <div class="holes"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <div class="margin-rule"></div>
+                <div class="page">
+                    <div class="runhead"><span class="no">No. 10</span><span>版权页</span></div>
+                    <div class="close-wrap">
+                        <h2 class="display reveal d1" style="font-size: 124px;">一套系统，<br><em>而非命令集合。</em></h2>
+                        <p class="lede reveal d2" style="margin-top: 36px; font-size: 24px; max-width: 1100px;">先澄清再动手 · 测试优先 · 验证闭环 · 安全前置 · 把经验沉淀为资产 · 把它当作系统而非命令包。</p>
+                        <div class="close-links reveal d3">
+                            <span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><path d="M22 6l-10 7L2 6"></path></svg>github.com/affaan-m/ECC</span>
+                            <span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z"></path></svg>中文导读教程站</span>
+                        </div>
+                        <a class="cta-btn reveal d4" href="https://chasen-liao.github.io/ecc-deck/" target="_blank" rel="noopener">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                            在线演示 · GitHub Pages
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" stroke-width="2.5"><path d="M7 17L17 7M7 7h10v10"></path></svg>
+                        </a>
+                    </div>
+                    <aside class="notes"><span class="nlabel">speaker notes</span>收尾回到六条关键原则，强调"系统思维"是 ECC 的核心心智。给观众两个入口：上游 GitHub 仓库（核对原始定义），中文导读教程站（中文场景下按需检索）。结束时可问：你最想先试 /plan 还是 /tdd？</aside>
+                    <div class="baseline"><span>谢谢</span><span>10 / 10</span></div>
+                </div>
+            </div>
+            <div class="tabs" aria-hidden="true">
+                <span class="tab tab-1">Intro</span><span class="tab tab-2">System</span><span class="tab tab-3">Commands</span><span class="tab tab-4">Workflow</span><span class="tab tab-5 on">End</span>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<div class="deck-controls" aria-hidden="true"><span class="cur" id="pageCur">1</span>&nbsp;/&nbsp;<span id="pageTotal">10</span></div>
+
+<script>
+/* ===========================================
+   SLIDE PRESENTATION CONTROLLER
+   =========================================== */
+(function () {
+    'use strict';
+
+    var STAGE_W = 1920;
+    var STAGE_H = 1080;
+
+    var stage = document.getElementById('deckStage');
+    var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+    var pageCur = document.getElementById('pageCur');
+    var pageTotal = document.getElementById('pageTotal');
+    var current = 0;
+    var wheelLockUntil = 0;
+
+    pageTotal.textContent = String(slides.length);
+
+    function fitStage() {
+        var factor = Math.min(window.innerWidth / STAGE_W, window.innerHeight / STAGE_H);
+        var x = (window.innerWidth - STAGE_W * factor) / 2;
+        var y = (window.innerHeight - STAGE_H * factor) / 2;
+        stage.style.transform = 'translate(' + x + 'px, ' + y + 'px) scale(' + factor + ')';
+    }
+
+    function indexFromHash() {
+        var m = /^#\/(\d+)$/.exec(window.location.hash);
+        if (!m) return null;
+        var idx = parseInt(m[1], 10);
+        return isNaN(idx) ? null : idx;
+    }
+
+    function show(index, skipHash) {
+        current = Math.max(0, Math.min(index, slides.length - 1));
+        slides.forEach(function (slide, i) {
+            slide.classList.toggle('active', i === current);
+            slide.classList.toggle('visible', i === current);
+        });
+        pageCur.textContent = String(current + 1);
+        if (!skipHash) {
+            var target = '#/' + current;
+            if (window.location.hash !== target) {
+                window.history.replaceState(null, '', target);
+            }
+        }
+    }
+
+    function next() { show(current + 1); }
+    function prev() { show(current - 1); }
+
+    document.addEventListener('keydown', function (e) {
+        if (e.target && e.target.getAttribute && e.target.getAttribute('contenteditable')) return;
+        switch (e.key) {
+            case 'ArrowRight':
+            case 'ArrowDown':
+            case ' ':
+            case 'PageDown':
+                e.preventDefault(); next(); break;
+            case 'ArrowLeft':
+            case 'ArrowUp':
+            case 'PageUp':
+                e.preventDefault(); prev(); break;
+            case 'Home':
+                e.preventDefault(); show(0); break;
+            case 'End':
+                e.preventDefault(); show(slides.length - 1); break;
+        }
+    });
+
+    document.addEventListener('wheel', function (e) {
+        var now = Date.now();
+        if (now < wheelLockUntil) return;
+        if (Math.abs(e.deltaY) < 12) return;
+        wheelLockUntil = now + 650;
+        if (e.deltaY > 0) { next(); } else { prev(); }
+    }, { passive: true });
+
+    var touchX = null;
+    document.addEventListener('touchstart', function (e) {
+        if (e.touches.length === 1) touchX = e.touches[0].clientX;
+    }, { passive: true });
+    document.addEventListener('touchend', function (e) {
+        if (touchX === null) return;
+        var dx = e.changedTouches[0].clientX - touchX;
+        touchX = null;
+        if (Math.abs(dx) < 40) return;
+        if (dx < 0) { next(); } else { prev(); }
+    }, { passive: true });
+
+    window.addEventListener('hashchange', function () {
+        var idx = indexFromHash();
+        if (idx !== null && idx !== current) show(idx, true);
+    });
+
+    window.addEventListener('resize', fitStage);
+
+    fitStage();
+    var initial = indexFromHash();
+    show(initial !== null ? initial : 0, initial === null);
+})();
+</script>
+
+
+</body></html>
