@@ -63,20 +63,20 @@
 
 <div class="stats-container">
   <div class="stats-card">
-    <div class="stats-number">67</div>
+    <div class="stats-number">71</div>
     <div class="stats-label">Agents 智能体</div>
   </div>
   <div class="stats-card">
-    <div class="stats-number">271</div>
+    <div class="stats-number">311</div>
     <div class="stats-label">Skills 技能数</div>
   </div>
   <div class="stats-card">
-    <div class="stats-number">59 + 92</div>
+    <div class="stats-number">59 + 97</div>
     <div class="stats-label">Commands 命令数</div>
   </div>
 </div>
 <div class="sync-info">
-  📌 <strong>镜像 SHA:</strong> <code>34faa39b</code> (上游 <code>2.0.0</code>) | ⏰ <strong>最后同步:</strong> 2026-06-21
+  📌 <strong>镜像 SHA:</strong> <code>90606c83</code> (上游 <code>2.2.3</code>) | ⏰ <strong>最后同步:</strong> 2026-10-25
 </div>
 
 !!! tip "回到上游"

@@ -123,7 +123,7 @@ git add everything-claude-code   # 写回新 SHA 到主仓库
 | `.gitignore` | 10 行: `site/`, `__pycache__/`, `*.pyc`, `.pytest_cache/`, `.venv/`, `venv/`, `.DS_Store`, `Thumbs.db`。 |
 | `scripts/migrate_docs.py` | 一次性迁移 CLI(见上)。 |
 | `tests/test_migrate_docs.py` | 16 个 pytest 测试, 无 `conftest.py` / `pytest.ini`。 |
-| `CLAUDE.md` | 项目级 Claude memory; 已写明"gitlink 写回、59 vs 79、CRLF 警告"等易错点。 |
+| `CLAUDE.md` | 项目级 Claude memory; 已写明"gitlink 写回、59 vs 97、CRLF 警告"等易错点。 |
 | `.claude/skills/sync-upstream-zh-docs/SKILL.md` | 维护 skill; 用户说"同步上游 / 刷新中文文档"时**先调用此 skill**。 |
 | `LICENSE` | 保留上游许可原文, 不修改。 |
 
@@ -151,8 +151,8 @@ git add everything-claude-code   # 写回新 SHA 到主仓库
 
 - **不要编辑 `everything-claude-code/` 下任何文件**; 同步只能 fast-forward。
 - **不要在 `docs/*.md` 里使用 `everything-claude-code/...` 路径**; 用 `https://github.com/affaan-m/ECC/...`。
-- **不要混用 "59" 和 "79"**: 79 是 `commands/` 目录文件数(含 `legacy-command-shims/`), 59 是 `COMMANDS-QUICK-REF.md` 列的全局 slash command 数。
-- **不要把"67 agents / 271 skills / 92 legacy command shims"与"59 slash commands"混为一谈**: 前者是上游 README 当前权威行(`everything-claude-code/README.md` L442), 后者是 `COMMANDS-QUICK-REF.md` 头部声明的全局安装数。
+- **不要混用 "59" 和 "97"**: 97 是 `commands/` 目录文件数(含 `legacy-command-shims/`), 59 是 `COMMANDS-QUICK-REF.md` 列的全局 slash command 数。
+- **不要把"71 agents / 311 skills / 97 legacy command shims"与"59 slash commands"混为一谈**: 前者是上游 README 当前权威行(`everything-claude-code/README.md` L144), 后者是 `COMMANDS-QUICK-REF.md` 头部声明的全局安装数。
 - **不要重跑 `python -m scripts.migrate_docs`**(首版已完成); 后续编辑直接改 `docs/`。
 - **不要修改 `LICENSE` 或 `everything-claude-code/README.zh-CN.md`**(上游维护)。
 - **不要用 `git rebase` / 非 ff merge** 推进 `everything-claude-code/`; diff 不可读。

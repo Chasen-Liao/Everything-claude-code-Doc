@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 这是 `affaan-m/Everything Claude Code (ECC)` 的**中文教程镜像仓库**，分两层：
 
 - **顶层教程层（本仓库维护）**：`README.md`、`ECC-COMMANDS-ZH.md`、`ECC-NAVIGATION-ZH.md` 三份中文文档，负责解释、串联、给出阅读路径。
-- **上游同步层**：`everything-claude-code/`，是上游 ECC 的嵌入式 gitlink 克隆（当前 pinned 在上游 SHA `34faa39b`，上游版本 `2.0.0`），其内容由上游管，本仓库只做同步。
+- **上游同步层**：`everything-claude-code/`，是上游 ECC 的嵌入式 gitlink 克隆（当前 pinned 在上游 SHA `90606c83`，上游版本 `2.2.3`），其内容由上游管，本仓库只做同步。
 
 权威定义始终以上游为准；本仓库的"教程层"只翻译/梳理/对齐计数，不复制完整原始文档。
 
@@ -21,15 +21,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 主仓库要写回新 SHA，必须 `git add everything-claude-code` 然后再 commit。
 - 推进方式只能 fast-forward，不要 rebase 或非 ff merge——重写历史会让与上游的 diff 变得不可读。
 
-### `59` 和 `92` 是两个不同的数
+### `59` 和 `97` 是两个不同的数
 
-- `everything-claude-code/commands/` 目录下是 **92 个命令文件**（含 `legacy-command-shims/` 的兼容别名）。
+- `everything-claude-code/commands/` 目录下是 **97 个命令文件**（含 `legacy-command-shims/` 的兼容别名）。
 - `everything-claude-code/COMMANDS-QUICK-REF.md` 列的是 **59 个全局 slash commands**。
-- 两者不可互换；上层中文文档提到"59"时不要改成"92"，反之亦然。
+- 两者不可互换；上层中文文档提到"59"时不要改成"97"，反之亦然。
 
 ### 上游 README 公开承诺的同步面
 
-`agents / skills / commands / rules` 数量与 `everything-claude-code/README.md` 里的 "67 agents, 271 skills, 92 legacy command shims" 对齐。`README.md` 第 442、1529、1531 行是这几组数字的权威来源。
+`agents / skills / commands / rules` 数量与 `everything-claude-code/README.md` 里的 "71 agents, 311 skills, 97 legacy command shims" 对齐。`README.md` 第 144、148、149、150 行是这几组数字的权威来源。
 
 ## 维护工作流（最常用命令）
 
@@ -42,7 +42,7 @@ git merge --ff-only origin/main
 
 # 2. 量化变化、对齐权威计数
 for d in agents skills commands rules; do echo -n "$d: "; ls $d | wc -l; done
-grep -nE "67 agents|271 skills|92 legacy|59 slash" README.md
+grep -nE "71 agents|311 skills|97 legacy|59 slash" README.md
 
 # 3. 回到主仓库写回新 SHA 并按需刷新顶层中文文档
 cd ..
@@ -68,7 +68,7 @@ git add everything-claude-code
 
 `.claude/skills/sync-upstream-zh-docs/SKILL.md` 把"同步上游 → 量化变化 → 扫描顶层中文文档过期项 → 精准修改"整条链路编码成了单一 skill。
 
-当用户说"同步上游 / 刷新中文文档 / 维护教程"，或观察到上游 `VERSION` 变化、agents/skills/commands 计数漂移时，**先调用该 skill**，再按它的指引执行。它内部已包含易错点（gitlink 写回、59 vs 79、CRLF 警告等）。
+当用户说"同步上游 / 刷新中文文档 / 维护教程"，或观察到上游 `VERSION` 变化、agents/skills/commands 计数漂移时，**先调用该 skill**，再按它的指引执行。它内部已包含易错点（gitlink 写回、59 vs 97、CRLF 警告等）。
 
 ## Pages 站点维护
 
